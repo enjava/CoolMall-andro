@@ -42,11 +42,13 @@ public class HelpActivity extends Activity {
 
     public void onReback(View view) {
         startActivity(new Intent(this,GoodsActivity.class));
+        time.cancel();
         finish();
     }
 
     public void goumai(View view) {
         startActivity(new Intent(this,GoodsActivity.class));
+        time.cancel();
         finish();
     }
 
@@ -72,9 +74,4 @@ public class HelpActivity extends Activity {
         }
     }
 
-    public void finish(){
-        super.finish();
-        if (time!=null)
-            time.cancel();
-    }
 }

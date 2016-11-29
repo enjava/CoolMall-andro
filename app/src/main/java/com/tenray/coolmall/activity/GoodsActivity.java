@@ -151,10 +151,11 @@ public class GoodsActivity extends Activity {
 
 
     }
+    @Override
     public void finish(){
-        super.finish();
         if (time!=null)
             time.cancel();
+        super.finish();
     }
 
 }

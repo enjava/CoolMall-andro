@@ -6,6 +6,7 @@ package com.tenray.coolmall.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.ThumbnailUtils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -25,8 +26,8 @@ import java.util.Map;
  */
 public class QRCodeUtil {
 
-    private static int QR_WIDTH = 400;//宽度
-    private static int QR_HEIGHT = 400;//高度
+    private static int QR_WIDTH = 430;//宽度
+    private static int QR_HEIGHT = 430;//高度
     /**
      * 生成二维码Bitmap
      *
@@ -85,7 +86,7 @@ public class QRCodeUtil {
     /**
      * 在二维码中间添加Logo图案
      */
-    private static Bitmap addLogo(Bitmap src, Bitmap logo) {
+    public static Bitmap addLogo(Bitmap src, Bitmap logo) {
         if (src == null) {
             return null;
         }
@@ -109,7 +110,7 @@ public class QRCodeUtil {
         }
 
         //logo大小为二维码整体大小的1/5
-        float scaleFactor = srcWidth * 1.0f / 5 / logoWidth;
+        float scaleFactor = srcWidth * 1.0f / 6/ logoWidth;
         Bitmap bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
         try {
             Canvas canvas = new Canvas(bitmap);
@@ -131,18 +132,13 @@ public class QRCodeUtil {
      *
      * @return
      */
-    private Bitmap createBitmap(String text) {
+    public static Bitmap createBitmap(String text) {
         Bitmap bitmap = null;
         try {
             Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
-            hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
             BitMatrix bitMatrix = new QRCodeWriter().encode(text,
                     BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints);
-
-            // QRCodeWriter writer = new QRCodeWriter();
-            // // 把输入的文本转为二维码
-            // BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE,
-            // QR_WIDTH, QR_HEIGHT);
 
             int[] pixels = new int[QR_WIDTH * QR_HEIGHT];
             for (int y = 0; y < QR_HEIGHT; y++) {
@@ -164,4 +160,23 @@ public class QRCodeUtil {
         }
         return bitmap;
     }
+    public static Bitmap modifyLogo(Bitmap bgBitmap, Bitmap logoBitmap) {
+
+        int bgWidth = bgBitmap.getWidth();
+        int bgHeigh = bgBitmap.getHeight();
+        //通过ThumbnailUtils压缩原图片，并指定宽高为背景图的3/4
+        logoBitmap = ThumbnailUtils.extractThumbnail(logoBitmap,bgWidth*3/4, bgHeigh*3/4, ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+        Bitmap cvBitmap = Bitmap.createBitmap(bgWidth, bgHeigh, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(cvBitmap);
+        // 开始合成图片
+        canvas.drawBitmap(bgBitmap, 0, 0, null);
+        canvas.drawBitmap(logoBitmap,(bgWidth - logoBitmap.getWidth()) /2,(bgHeigh - logoBitmap.getHeight()) / 2, null);
+        canvas.save(Canvas.ALL_SAVE_FLAG);// 保存
+        canvas.restore();
+        if(cvBitmap.isRecycled()){
+            cvBitmap.recycle();
+        }
+        return cvBitmap;
+    }
+
 }

@@ -2,6 +2,8 @@ package com.tenray.coolmall.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tenray.coolmall.R;
+import com.tenray.coolmall.util.QRCodeUtil;
 
 /**
  * Created by en on 2016/11/10.
@@ -79,6 +82,14 @@ public class BuyActivity extends Activity {
         Intent intent = this.getIntent();
         position= intent.getIntExtra("position",0);
         init();
+        initData();
+    }
+
+    private void initData() {
+        Bitmap bm = QRCodeUtil.createBitmap("http://www.coolmall.cc/");
+        Bitmap  logo = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+        Bitmap QRCode=QRCodeUtil.addLogo(bm,logo);
+        mQRCode.setImageBitmap(QRCode);
     }
 
     public void init() {
@@ -174,10 +185,11 @@ public class BuyActivity extends Activity {
             mReback.setText(millisUntilFinished /1000+"秒后返回");
         }
     }
-
+    @Override
     public void finish(){
-        super.finish();
         if (time!=null)
             time.cancel();
+        super.finish();
+
     }
 }
