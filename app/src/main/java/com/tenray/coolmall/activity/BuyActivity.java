@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tenray.coolmall.R;
+import com.tenray.coolmall.util.CountDownTimerUtil;
 import com.tenray.coolmall.util.QRCodeUtil;
 
 /**
@@ -167,7 +167,7 @@ public class BuyActivity extends Activity {
         finish();
     }
 
-    class TimeCount extends CountDownTimer {
+    class TimeCount extends CountDownTimerUtil {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }

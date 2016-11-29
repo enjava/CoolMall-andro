@@ -3,7 +3,6 @@ package com.tenray.coolmall.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -15,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tenray.coolmall.R;
+import com.tenray.coolmall.util.CountDownTimerUtil;
 
 /**
  * Created by en on 2016/11/9.
@@ -131,7 +131,7 @@ public class GoodsActivity extends Activity {
         }
     }
 
-    class TimeCount extends CountDownTimer {
+    class TimeCount extends CountDownTimerUtil {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }
