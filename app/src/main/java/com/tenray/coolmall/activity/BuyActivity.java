@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tenray.coolmall.R;
-import com.tenray.coolmall.util.CountDownTimerUtil;
+import com.tenray.coolmall.util.CountDownTimer;
 import com.tenray.coolmall.util.QRCodeUtil;
 
 /**
@@ -167,7 +167,7 @@ public class BuyActivity extends Activity {
         finish();
     }
 
-    class TimeCount extends CountDownTimerUtil {
+    class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }

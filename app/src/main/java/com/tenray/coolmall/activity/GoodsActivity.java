@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tenray.coolmall.R;
-import com.tenray.coolmall.util.CountDownTimerUtil;
+import com.tenray.coolmall.util.CountDownTimer;
 
 /**
  * Created by en on 2016/11/9.
@@ -131,7 +131,7 @@ public class GoodsActivity extends Activity {
         }
     }
 
-    class TimeCount extends CountDownTimerUtil {
+    class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }

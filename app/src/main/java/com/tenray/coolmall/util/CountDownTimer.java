@@ -23,32 +23,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 
-/**
- * Schedule a countdown until a time in the future, with
- * regular notifications on intervals along the way.
- *
- * Example of showing a 30 second countdown in a text field:
- *
- * <pre class="prettyprint">
- * new CountDownTimer(30000, 1000) {
- *
- *     public void onTick(long millisUntilFinished) {
- *         mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
- *     }
- *
- *     public void onFinish() {
- *         mTextField.setText("done!");
- *     }
- *  }.start();
- * </pre>
- *
- * The calls to {@link #onTick(long)} are synchronized to this object so that
- * one call to {@link #onTick(long)} won't ever occur before the previous
- * callback is complete.  This is only relevant when the implementation of
- * {@link #onTick(long)} takes an amount of time to execute that is significant
- * compared to the countdown interval.
- */
-public abstract class CountDownTimerUtil {
+/* The calls to {@link #onTick(long)} are synchronized to this object so that
+        * one call to {@link #onTick(long)} won't ever occur before the previous
+        * callback is complete.  This is only relevant when the implementation of
+        * {@link #onTick(long)} takes an amount of time to execute that is significant
+        * compared to the countdown interval.
+        */
+public abstract class CountDownTimer {
 
     /**
      * Millis since epoch when alarm should stop.
@@ -62,9 +43,6 @@ public abstract class CountDownTimerUtil {
 
     private long mStopTimeInFuture;
 
-    /**
-     * boolean representing if the timer was cancelled
-     */
     private boolean mCancelled = false;
 
     /**
@@ -74,30 +52,32 @@ public abstract class CountDownTimerUtil {
      * @param countDownInterval The interval along the way to receive
      *   {@link #onTick(long)} callbacks.
      */
-    public CountDownTimerUtil(long millisInFuture, long countDownInterval) {
+    public CountDownTimer(long millisInFuture, long countDownInterval) {
         mMillisInFuture = millisInFuture;
         mCountdownInterval = countDownInterval;
     }
 
     /**
      * Cancel the countdown.
+     *
+     * Do not call it from inside CountDownTimer threads
      */
-    public synchronized final void cancel() {
-        mCancelled = true;
+    public final void cancel() {
         mHandler.removeMessages(MSG);
+        mCancelled = true;
     }
 
     /**
      * Start the countdown.
      */
-    public synchronized final CountDownTimerUtil start() {
-        mCancelled = false;
+    public synchronized final CountDownTimer start() {
         if (mMillisInFuture <= 0) {
             onFinish();
             return this;
         }
         mStopTimeInFuture = SystemClock.elapsedRealtime() + mMillisInFuture;
         mHandler.sendMessage(mHandler.obtainMessage(MSG));
+        mCancelled = false;
         return this;
     }
 
@@ -123,11 +103,7 @@ public abstract class CountDownTimerUtil {
         @Override
         public void handleMessage(Message msg) {
 
-            synchronized (CountDownTimerUtil.this) {
-                if (mCancelled) {
-                    return;
-                }
-
+            synchronized (CountDownTimer.this) {
                 final long millisLeft = mStopTimeInFuture - SystemClock.elapsedRealtime();
 
                 if (millisLeft <= 0) {
@@ -146,7 +122,9 @@ public abstract class CountDownTimerUtil {
                     // complete, skip to next interval
                     while (delay < 0) delay += mCountdownInterval;
 
-                    sendMessageDelayed(obtainMessage(MSG), delay);
+                    if (!mCancelled) {
+                        sendMessageDelayed(obtainMessage(MSG), delay);
+                    }
                 }
             }
         }

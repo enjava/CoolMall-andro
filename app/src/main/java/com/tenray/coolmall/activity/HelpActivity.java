@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.tenray.coolmall.R;
-import com.tenray.coolmall.util.CountDownTimerUtil;
+import com.tenray.coolmall.util.CountDownTimer;
 
 /**
  * Created by en on 2016/11/11.
@@ -55,7 +55,7 @@ public class HelpActivity extends Activity {
     public void quhuo(View view) {
     }
 
-    class TimeCount extends CountDownTimerUtil {
+    class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }
