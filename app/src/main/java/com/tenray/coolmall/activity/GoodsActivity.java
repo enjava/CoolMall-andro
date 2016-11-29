@@ -91,11 +91,13 @@ public class GoodsActivity extends Activity {
 
     public void onReback(View view) {
         startActivity(new Intent(this,MainActivity.class));
+        time.cancel();
         finish();
     }
 
     public void bangzhu(View view) {
         startActivity(new Intent (this,HelpActivity.class));
+        time.cancel();
         finish();
     }
 
@@ -153,8 +155,7 @@ public class GoodsActivity extends Activity {
     }
     @Override
     public void finish(){
-        if (time!=null)
-            time.cancel();
+
         super.finish();
     }
 

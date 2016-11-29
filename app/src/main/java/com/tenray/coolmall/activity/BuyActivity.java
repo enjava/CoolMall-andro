@@ -163,6 +163,7 @@ public class BuyActivity extends Activity {
     }
 
     public void onReback(View view) {
+        time.cancel();
         startActivity(new Intent(this,GoodsActivity.class));
         finish();
     }
@@ -185,11 +186,5 @@ public class BuyActivity extends Activity {
             mReback.setText(millisUntilFinished /1000+"秒后返回");
         }
     }
-    @Override
-    public void finish(){
-        if (time!=null)
-            time.cancel();
-        super.finish();
 
-    }
 }
