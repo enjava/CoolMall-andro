@@ -53,92 +53,35 @@
             android:layout_alignParentStart="true"
             android:layout_weight="1" />
     </RelativeLayout>
-  <ImageView
-      android:layout_width="400dp"
-      android:layout_height="60dp"
-      android:layout_below="@+id/rl1"
-      android:scaleType="fitStart"
-      android:src="@mipmap/leibie"
-      android:id="@+id/imgyiliao"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:layout_marginLeft="950dp"
-        android:id="@+id/reback"
-        android:onClick="onReback"
-        android:textColor="#FF4040"
-        android:textStyle="bold"
-        android:text="60秒后返回"/>
-    <GridView
-        android:id="@+id/gv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/downimg"
-        android:layout_weight="2"
-        android:numColumns="5"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:verticalSpacing="10sp"
-       android:layout_marginBottom="240dp"/>
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:scaleType="centerInside"
-        android:layout_marginTop="30dp"
-        android:id="@+id/downimg"
-        android:padding="8dp"
-        android:paddingRight="80dp"
-        android:paddingLeft="80dp"
-        android:layout_marginBottom="10dp"
-        android:src="@mipmap/upsroll"
-        android:layout_below="@+id/imgyiliao"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/goumai1"
+        android:src="@mipmap/xianjin4"
         android:id="@+id/imageView5"
+        android:onClick="onXianjin"
         android:scaleType="centerInside"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="320dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="340dp"
+        android:layout_marginBottom="80dp"
         />
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/quhuo"
+        android:src="@mipmap/weixin4"
         android:id="@+id/imageView6"
-        android:layout_marginBottom="50dp"
+        android:onClick="onWeiXin"
+        android:layout_marginBottom="80dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/bangzhu"
+        android:src="@mipmap/zhifubao3"
         android:id="@+id/imageView7"
+        android:onClick="onAlipay"
         android:layout_alignParentBottom="true"
-        android:onClick="bangzhu"
-        android:layout_marginRight="320dp"
+        android:layout_marginRight="340dp"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="50dp" />
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:scaleType="centerInside"
-        android:id="@+id/downimga"
-        android:padding="8dp"
-        android:paddingRight="80dp"
-        android:paddingLeft="80dp"
-        android:src="@mipmap/downsroll"
-        android:layout_above="@+id/imageView5"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginBottom="80dp" />
 </RelativeLayout>
