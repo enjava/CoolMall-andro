@@ -3,85 +3,324 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg">
+
     <RelativeLayout
+        android:id="@+id/rl1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rl1"
         android:background="#000">
+
         <TextView
+            android:id="@+id/tvw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="3dp"
-            android:text="编号:"
-            android:textColor="#E0EEEE"
-            android:layout_centerVertical="true"
-            android:id="@+id/tvw"
             android:layout_alignBaseline="@+id/textView"
             android:layout_alignBottom="@+id/textView"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/textView"
-            android:layout_toStartOf="@+id/textView" />
+            android:layout_toStartOf="@+id/textView"
+            android:paddingRight="3dp"
+            android:text="编号:"
+            android:textColor="#E0EEEE" />
+
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:paddingRight="5dp"
             android:text="1234567890"
-            android:textColor="#9ACD32"
-            android:id="@+id/textView"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            />
+            android:textColor="#9ACD32" />
+
         <ImageView
+            android:id="@+id/iv5"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:scaleType="centerInside"
-            android:padding="5dp"
-            android:src="@mipmap/xiabiao"
-            android:id="@+id/iv5"
-            android:layout_centerVertical="true"
             android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tvw"
-            android:layout_toStartOf="@+id/tvw" />
+            android:layout_toStartOf="@+id/tvw"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/xiabiao" />
+
         <ImageView
+            android:id="@+id/iV4"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:padding="10dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/kumo"
-            android:id="@+id/iV4"
-            android:layout_alignTop="@+id/iv5"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_weight="1" />
+            android:layout_alignTop="@+id/iv5"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/kumo" />
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="630dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginRight="300dp"
+        android:layout_marginTop="300dp"
+        android:background="@mipmap/btyzebc"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp">
+            <Button
+                android:id="@+id/btn_ed"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@mipmap/ed_btn"
+                android:gravity="left|center_vertical"
+                android:paddingLeft="20dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:hint="请输入取货码"
+                />
 
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            >
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:background="@drawable/me_number_selector"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:text="1" />
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:text="2" />
+            <Button
+                android:id="@+id/btn3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:text="3" />
+            <Button
+                android:id="@+id/btnDel"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:text="Del" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+
+            >
+            <Button
+                android:id="@+id/btn4"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:text="4" />
+            <Button
+                android:id="@+id/btn5"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:text="5" />
+            <Button
+                android:id="@+id/btn6"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:text="6" />
+            <Button
+                android:id="@+id/btnDelAll"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:onClick="onClick"
+                android:background="@drawable/me_number_selector"
+                android:text="清空" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    >
+                    <Button
+                        android:id="@+id/btn7"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="onClick"
+                        android:background="@drawable/me_number_selector"
+                        android:textSize="22dp"
+                        android:textStyle="bold"
+                        android:text="7" />
+                    <Button
+                        android:id="@+id/btn8"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:textSize="22dp"
+                        android:textStyle="bold"
+                        android:onClick="onClick"
+                        android:background="@drawable/me_number_selector"
+                        android:text="8" />
+                    <Button
+                        android:id="@+id/btn9"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:textSize="22dp"
+                        android:textStyle="bold"
+                        android:onClick="onClick"
+                        android:background="@drawable/me_number_selector"
+                        android:text="9" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    >
+                    <Button
+                        android:id="@+id/btnX"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="onClick"
+                        android:background="@drawable/me_number_selector"
+                        android:textSize="22dp"
+                        android:textStyle="bold"
+                        android:textColor="#CCCCCC"
+                        android:text="*" />
+                    <Button
+                        android:id="@+id/btn0"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:textSize="22dp"
+                        android:textStyle="bold"
+                        android:onClick="onClick"
+                        android:background="@drawable/me_number_selector"
+                        android:text="0" />
+                    <Button
+                        android:id="@+id/btnY"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:textSize="22dp"
+                        android:textStyle="bold"
+                        android:textColor="#CCCCCC"
+                        android:onClick="onClick"
+                        android:background="@drawable/me_number_selector"
+                        android:text="#" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="29"
+                >
+                <Button
+                    android:id="@+id/btnOK"
+                    android:layout_width="100dp"
+                    android:layout_height="210dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="22dp"
+                    android:textStyle="bold"
+                    android:onClick="onClick"
+                    android:background="@drawable/me_ok_selector"
+                    android:text="确认" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/xianjin4"
+        android:src="@mipmap/goumai"
         android:id="@+id/imageView5"
-        android:onClick="onXianjin"
         android:scaleType="centerInside"
+        android:onClick="goumai"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="340dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="320dp"
+        android:layout_marginBottom="50dp"
         />
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/weixin4"
+        android:src="@mipmap/quhuo1"
         android:id="@+id/imageView6"
-        android:onClick="onWeiXin"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/zhifubao3"
+        android:src="@mipmap/bangzhu"
         android:id="@+id/imageView7"
-        android:onClick="onAlipay"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="340dp"
+        android:onClick="bangzhu"
+        android:layout_marginRight="320dp"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="80dp" />
+        android:layout_marginBottom="50dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="950dp"
+        android:id="@+id/reback"
+        android:onClick="onReback"
+        android:textColor="#FF4040"
+        android:textStyle="bold"
+        android:text="60秒后返回"/>
 </RelativeLayout>

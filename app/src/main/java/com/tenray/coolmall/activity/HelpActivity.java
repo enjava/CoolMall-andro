@@ -41,36 +41,39 @@ public class HelpActivity extends Activity {
     }
 
     public void onReback(View view) {
-        startActivity(new Intent(this,GoodsActivity.class));
         time.cancel();
+        startActivity(new Intent(this, GoodsActivity.class));
         finish();
     }
 
     public void goumai(View view) {
-        startActivity(new Intent(this,GoodsActivity.class));
         time.cancel();
+        startActivity(new Intent(this, GoodsActivity.class));
         finish();
     }
 
     public void quhuo(View view) {
+        time.cancel();
+        startActivity(new Intent(this, QuhuoActivity.class));
+        finish();
     }
 
     class TimeCount extends CountDownTimer {
+
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }
+
         @Override
         public void onFinish() {
-            startActivity(new Intent(HelpActivity.this,MainActivity.class));
+            startActivity(new Intent(HelpActivity.this, MainActivity.class));
             finish();
-            //计时完毕时触发
-//            checking.setText("重新验证");
-//            checking.setClickable(true);
         }
+
         @Override
-        public void onTick(long millisUntilFinished){//计时过程显示
-//            checking.setClickable(false);
-            mReback.setText(millisUntilFinished /1000+"秒后返回");
+        public void onTick(long millisUntilFinished) {//计时过程显示
+            mReback.setText(millisUntilFinished / 1000 + "秒后返回");
+
         }
     }
 

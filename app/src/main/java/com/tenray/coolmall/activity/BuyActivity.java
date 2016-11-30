@@ -32,40 +32,41 @@ public class BuyActivity extends Activity {
     private ImageView mXianjin2;
     private Button mReback;
     private TimeCount time;
-    private String[] mProductNames=new String[]{
-            "利群","七匹狼","口水娃","红牛功能饮料","王老吉凉茶",
-            "百事可乐","可口可乐330ml", "美汁源爽粒葡萄","统一绿茶","哇哈哈营养快线",
-            "哇哈哈营养快线","哇哈哈营养快线","哇哈哈营养快线","哇哈哈营养快线","哇哈哈营养快线" ,
-            "哇哈哈营养快线","哇哈哈营养快线","哇哈哈营养快线","哇哈哈营养快线","哇哈哈营养快线",
-            "利群","七匹狼","口水娃","红牛功能饮料","王老吉凉茶",
-            "百事可乐","可口可乐330ml", "美汁源爽粒葡萄","统一绿茶","哇哈哈营养快线"
+    private String[] mProductNames = new String[]{
+            "利群", "七匹狼", "口水娃", "红牛功能饮料", "王老吉凉茶",
+            "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线",
+            "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线",
+            "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线",
+            "利群", "七匹狼", "口水娃", "红牛功能饮料", "王老吉凉茶",
+            "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线"
     };
-    private String [] mProductChnanels=new String[]{
-            "A1","A3","A5","A7","B1",
-            "B2","B3","B4","B5","C1",
-            "C2","C3","C4","C5","C6",
-            "C7","C8","D6","E3","E5",
-            "C2","C3","C4","C5","C6",
-            "C7","C8","D6","E3","E5"
+    private String[] mProductChnanels = new String[]{
+            "A1", "A3", "A5", "A7", "B1",
+            "B2", "B3", "B4", "B5", "C1",
+            "C2", "C3", "C4", "C5", "C6",
+            "C7", "C8", "D6", "E3", "E5",
+            "C2", "C3", "C4", "C5", "C6",
+            "C7", "C8", "D6", "E3", "E5"
     };
-    private String [] mProductPrices=new String[]{
-            "2.5","3.0","2.5","5.5","3.0",
-            "2.5","2.5","3.0","3.0","3.5",
-            "3.5","3.5","3.5","3.5","3.5",
-            "3.5","3.5","3.5","3.5","3.5",
-            "3.5","3.5","3.5","3.5","3.5",
-            "3.5","3.5","3.5","3.5","3.5"
+    private String[] mProductPrices = new String[]{
+            "2.5", "3.0", "2.5", "5.5", "3.0",
+            "2.5", "2.5", "3.0", "3.0", "3.5",
+            "3.5", "3.5", "3.5", "3.5", "3.5",
+            "3.5", "3.5", "3.5", "3.5", "3.5",
+            "3.5", "3.5", "3.5", "3.5", "3.5",
+            "3.5", "3.5", "3.5", "3.5", "3.5"
     };
     private int[] mProductIDs = new int[]{
-            R.mipmap.p1,R.mipmap.p2,R.mipmap.p3,R.mipmap.p4,R.mipmap.p5,
-            R.mipmap.p6,R.mipmap.p7,R.mipmap.p8,R.mipmap.p9,R.mipmap.p10,
-            R.mipmap.p1,R.mipmap.p2,R.mipmap.p3,R.mipmap.p4,R.mipmap.p5,
-            R.mipmap.p6,R.mipmap.p7,R.mipmap.p8,R.mipmap.p9,R.mipmap.p10,
-            R.mipmap.p1,R.mipmap.p2,R.mipmap.p3,R.mipmap.p4,R.mipmap.p5,
-            R.mipmap.p6,R.mipmap.p7,R.mipmap.p8,R.mipmap.p9,R.mipmap.p10
+            R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
+            R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10,
+            R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
+            R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10,
+            R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
+            R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10
     };
     //选择的位置
-    private  int position;
+    private int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +81,15 @@ public class BuyActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
         setContentView(R.layout.activity_buy);
         Intent intent = this.getIntent();
-        position= intent.getIntExtra("position",0);
+        position = intent.getIntExtra("position", 0);
         init();
         initData();
     }
 
     private void initData() {
         Bitmap bm = QRCodeUtil.createBitmap("http://www.coolmall.cc/");
-        Bitmap  logo = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-        Bitmap QRCode=QRCodeUtil.addLogo(bm,logo);
+        Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+        Bitmap QRCode = QRCodeUtil.addLogo(bm, logo);
         mQRCode.setImageBitmap(QRCode);
     }
 
@@ -116,15 +117,16 @@ public class BuyActivity extends Activity {
         time = new TimeCount(60000, 1000);//构造CountDownTimer对象
         time.start();//开始计时
         //商品名称
-       TextView mProductName= (TextView) findViewById(R.id.productName);
-       TextView mProductChannel= (TextView) findViewById(R.id.productChannel);
-       TextView mProductPrice= (TextView) findViewById(R.id.productPrice);
+        TextView mProductName = (TextView) findViewById(R.id.productName);
+        TextView mProductChannel = (TextView) findViewById(R.id.productChannel);
+        TextView mProductPrice = (TextView) findViewById(R.id.productPrice);
         mProductName.setText(mProductNames[position]);
-        mProductChannel.setText("货道:"+mProductChnanels[position]);
-        mProductPrice.setText(mProductPrices[position]+"元");
+        mProductChannel.setText("货道:" + mProductChnanels[position]);
+        mProductPrice.setText(mProductPrices[position] + "元");
         mXianjin2.setVisibility(View.INVISIBLE);
         mXianjin1.setVisibility(View.INVISIBLE);
     }
+
     //微信扫码支付
     public void onWeiXin(View view) {
         mZhifu5.setVisibility(View.VISIBLE);
@@ -137,7 +139,8 @@ public class BuyActivity extends Activity {
         mZhifu5.setImageResource(R.mipmap.weixin5);
         mZhifu2.setImageResource(R.mipmap.weixin2);
     }
-//支付宝扫码支付
+
+    //支付宝扫码支付
     public void onAlipay(View view) {
         mXianjin2.setVisibility(View.INVISIBLE);
         mXianjin1.setVisibility(View.INVISIBLE);
@@ -149,7 +152,8 @@ public class BuyActivity extends Activity {
         mZhifu5.setImageResource(R.mipmap.zhifubao5);
         mZhifu2.setImageResource(R.mipmap.zhifubao2);
     }
-   //现金购买
+
+    //现金购买
     public void onXianjin(View view) {
         mZhifu5.setVisibility(View.INVISIBLE);
         mZhifu2.setVisibility(View.INVISIBLE);
@@ -164,7 +168,7 @@ public class BuyActivity extends Activity {
 
     public void onReback(View view) {
         time.cancel();
-        startActivity(new Intent(this,GoodsActivity.class));
+        startActivity(new Intent(this, GoodsActivity.class));
         finish();
     }
 
@@ -172,19 +176,18 @@ public class BuyActivity extends Activity {
         public TimeCount(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);//参数依次为总时长,和计时的时间间隔
         }
+
         @Override
         public void onFinish() {
-            startActivity(new Intent(BuyActivity.this,MainActivity.class));
+            startActivity(new Intent(BuyActivity.this, MainActivity.class));
             finish();
-            //计时完毕时触发
-//            checking.setText("重新验证");
-//            checking.setClickable(true);
         }
+
         @Override
-        public void onTick(long millisUntilFinished){//计时过程显示
-//            checking.setClickable(false);
-            mReback.setText(millisUntilFinished /1000+"秒后返回");
+        public void onTick(long millisUntilFinished) {//计时过程显示
+            mReback.setText(millisUntilFinished / 1000 + "秒后返回");
         }
+
     }
 
 }

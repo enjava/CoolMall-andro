@@ -94,4 +94,21 @@ public class SpUtil {
 		}
 		sp.edit().remove(key).commit();
 	}
+
+
+	public static int getInt(Context ctx,String key,int defValue){
+		// (存储节点文件名称,读写方式)
+		if(sp == null){
+			sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+		}
+		return sp.getInt(key, defValue);
+	}
+
+	public static void putInt(Context ctx,String key,int value){
+		// (存储节点文件名称,读写方式)
+		if(sp == null){
+			sp = ctx.getSharedPreferences("config", Context.MODE_PRIVATE);
+		}
+		sp.edit().putInt(key, value).commit();
+	}
 }
