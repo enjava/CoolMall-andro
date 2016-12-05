@@ -19,7 +19,7 @@ import com.tenray.coolmall.serialport.FrameOrder;
 import com.tenray.coolmall.serialport.FrameUtil;
 import com.tenray.coolmall.serialport.SerialPortUtil;
 import com.tenray.coolmall.service.PollingService;
-import com.tenray.coolmall.util.ConstantValue;
+import com.tenray.coolmall.util.Constants;
 import com.tenray.coolmall.util.LogWriterUtil;
 import com.tenray.coolmall.util.PollingUtils;
 import com.tenray.coolmall.util.SpUtil;
@@ -68,7 +68,7 @@ public class ComActivity extends Activity {
                 + File.separator + "DemoLog.txt");
 
         try {
-            mLogWriter = LogWriterUtil.open(logf.getAbsolutePath());
+            mLogWriter = LogWriterUtil.open(logf.getAbsolutePath(),true);
 
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
@@ -115,12 +115,12 @@ public class ComActivity extends Activity {
             ToastUtil.show(this, "串口打开失败，请检查串口设置是否正确");
             return;
         }
-        int itimes = SpUtil.getInt(this, ConstantValue.FRAME_NUMBER, 0);
+        int itimes = SpUtil.getInt(this, Constants.FRAME_NUMBER, 0);
         String ml = FrameOrder.getSynTime(itimes, new Date());
         byte[] abc = FrameUtil.hexStringToBytes(FrameUtil.getCRCStr(ml));
         if (itimes > 65000)
             itimes = 0;
-        SpUtil.putInt(this, ConstantValue.FRAME_NUMBER, ++itimes);
+        SpUtil.putInt(this, Constants.FRAME_NUMBER, ++itimes);
         try {
             //  backStr = "";
             serialport.sendToPort(abc);

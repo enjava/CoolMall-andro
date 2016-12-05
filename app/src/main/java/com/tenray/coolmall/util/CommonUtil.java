@@ -276,8 +276,9 @@ public class CommonUtil {
 		listView.setLayoutParams(params);
 	}
 
-	public static String formatDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	public static String formatDate(String format) {
+		//"yyyy-MM-dd HH:mm"
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(new Date());
 	}
 

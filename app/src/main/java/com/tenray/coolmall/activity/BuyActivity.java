@@ -32,6 +32,7 @@ public class BuyActivity extends Activity {
     private ImageView mXianjin2;
     private Button mReback;
     private TimeCount time;
+
     private String[] mProductNames = new String[]{
             "利群", "七匹狼", "口水娃", "红牛功能饮料", "王老吉凉茶",
             "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线",
@@ -170,6 +171,9 @@ public class BuyActivity extends Activity {
         time.cancel();
         startActivity(new Intent(this, GoodsActivity.class));
         finish();
+    }
+
+    public void onOutGoods(View view) {
     }
 
     class TimeCount extends CountDownTimer {

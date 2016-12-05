@@ -11,7 +11,7 @@
 
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ComActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,7 +22,7 @@
         <activity android:name=".activity.BuyActivity"/>
         <activity android:name=".activity.HelpActivity"/>
         <activity android:name=".activity.QuhuoActivity"/>
-        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.ComActivity"/>
         <service android:name="com.tenray.coolmall.service.PollingService">
             <intent-filter>
                 <action android:name="com.tenray.coolmall.service.PollingService"/>
