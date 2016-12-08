@@ -30,6 +30,7 @@ public class PollingUtils {
         //使用AlarmManger的setRepeating方法设置定期执行的时间间隔（seconds秒）和需要执行的Service
         manager.setRepeating(AlarmManager.ELAPSED_REALTIME, triggerAtTime,
                 millisecond, pendingIntent);
+        System.out.println(cls.getSimpleName()+"开启轮询服务起始时间"+CommonUtil.formatDate("MM-dd HH:mm:ss:SSS"));
     }
     //停止轮询服务
     public static void stopPollingService(Context context, Class<?> cls,String action) {
@@ -41,5 +42,6 @@ public class PollingUtils {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //取消正在执行的服务
         manager.cancel(pendingIntent);
+        System.out.println(cls.getSimpleName()+"停止轮询服务时间"+CommonUtil.formatDate("MM-dd HH:mm:ss:SSS"));
     }
 }

@@ -8,7 +8,17 @@ public class Constants {
 	/**
 	 * 串口路径
 	 */
-	public static final String COMPATH = "com_path";
+	public static final String COM_PATH = "com_path";
+
+	/**
+	 * 货道
+	 */
+	public static final String CHANEL_NAME = "chanel_name";
+
+	/**
+	 * 货道
+	 */
+	public static final String MACHINE_ID = "MACHINE_ID";
 //
 //	/**
 //	 * 是否设置密码key

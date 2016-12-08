@@ -1,10 +1,15 @@
 package com.tenray.coolmall.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -12,8 +17,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tenray.coolmall.R;
+import com.tenray.coolmall.application.MyApplication;
+import com.tenray.coolmall.entity.ChannelInfo;
+import com.tenray.coolmall.serialport.FrameOrder;
 import com.tenray.coolmall.util.CountDownTimer;
 import com.tenray.coolmall.util.QRCodeUtil;
+import com.tenray.coolmall.util.ToastUtil;
+import com.tenray.coolmall.websocket.OnReceiveMessage;
+
+import java.util.Map;
+
+import static com.tenray.coolmall.R.id.productName;
 
 /**
  * Created by en on 2016/11/10.
@@ -21,49 +35,50 @@ import com.tenray.coolmall.util.QRCodeUtil;
 
 public class BuyActivity extends Activity {
 
-    private ImageView mAlipay;
-    private ImageView mWeixin;
-    private ImageView mXianjin;
+    private Button mAlipay;
+    private Button mWeixin;
+    private Button mXianjin;
     private ImageView mZhifu5;
     private ImageView mZhifu2;
     private ImageView mQRCode;
     private ImageView mProductIV;
     private ImageView mXianjin1;
     private ImageView mXianjin2;
+    private TextView mTextv;
     private Button mReback;
     private TimeCount time;
-
-    private String[] mProductNames = new String[]{
+    private MyApplication myApplication;
+    private Map<String ,ChannelInfo> channelInfos;
+    private  MyReceiver myReceiver;
+    private String[] mProductName = new String[]{
             "利群", "七匹狼", "口水娃", "红牛功能饮料", "王老吉凉茶",
             "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线",
             "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线",
             "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线", "哇哈哈营养快线",
             "利群", "七匹狼", "口水娃", "红牛功能饮料", "王老吉凉茶",
+            "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线",
+            "利群", "七匹狼", "口水娃", "红牛功能饮料", "王老吉凉茶",
+            "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线",
             "百事可乐", "可口可乐330ml", "美汁源爽粒葡萄", "统一绿茶", "哇哈哈营养快线"
     };
-    private String[] mProductChnanels = new String[]{
-            "A1", "A3", "A5", "A7", "B1",
-            "B2", "B3", "B4", "B5", "C1",
-            "C2", "C3", "C4", "C5", "C6",
-            "C7", "C8", "D6", "E3", "E5",
-            "C2", "C3", "C4", "C5", "C6",
-            "C7", "C8", "D6", "E3", "E5"
+    private String[] mProductChnanel = new String[]{
+            "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8",
+            "B1", "B2", "B3", "B4", "B5",
+            "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8",
+            "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8",
+            "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8",
+            "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8"
     };
-    private String[] mProductPrices = new String[]{
-            "2.5", "3.0", "2.5", "5.5", "3.0",
-            "2.5", "2.5", "3.0", "3.0", "3.5",
-            "3.5", "3.5", "3.5", "3.5", "3.5",
-            "3.5", "3.5", "3.5", "3.5", "3.5",
-            "3.5", "3.5", "3.5", "3.5", "3.5",
-            "3.5", "3.5", "3.5", "3.5", "3.5"
-    };
-    private int[] mProductIDs = new int[]{
+    private int[] mProductID = new int[]{
             R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
             R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10,
             R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
             R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10,
             R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
-            R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10
+            R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10,
+            R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
+            R.mipmap.p6, R.mipmap.p7, R.mipmap.p8, R.mipmap.p9, R.mipmap.p10,
+            R.mipmap.p1, R.mipmap.p2, R.mipmap.p3, R.mipmap.p4, R.mipmap.p5,
     };
     //选择的位置
     private int position;
@@ -71,6 +86,9 @@ public class BuyActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myApplication= (MyApplication) this.getApplication();
+        channelInfos=myApplication.getChannelInfos();
+        myApplication.setOnReceiveMessage(new MyOnReceiveMessage());
         //防止息屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().getDecorView()
@@ -84,32 +102,43 @@ public class BuyActivity extends Activity {
         Intent intent = this.getIntent();
         position = intent.getIntExtra("position", 0);
         init();
-        initData();
+        // 注册广播接收
+        myReceiver = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("tenray.outgoods.success");    //只有持有相同的action的接受者才能接收此广播
+        registerReceiver(myReceiver, filter);
     }
 
     private void initData() {
-        Bitmap bm = QRCodeUtil.createBitmap("http://www.coolmall.cc/");
-        Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
-        Bitmap QRCode = QRCodeUtil.addLogo(bm, logo);
-        mQRCode.setImageBitmap(QRCode);
+        if(!TextUtils.isEmpty(QRurl)) {
+            Bitmap bm = QRCodeUtil.createBitmap(QRurl);
+            //Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+            //Bitmap QRCode = QRCodeUtil.addLogo(bm, bm);
+            mQRCode.setVisibility(View.VISIBLE);
+            mTextv.setText("");
+            mQRCode.setImageBitmap(bm);
+        }
     }
-
+    private  String  mChannel="";
+    private int  totalMoney;
     public void init() {
         //支付宝
-        mAlipay = (ImageView) findViewById(R.id.imageView7);
+        mAlipay = (Button) findViewById(R.id.imageView7);
         //微信
-        mWeixin = (ImageView) findViewById(R.id.imageView6);
+        mWeixin = (Button) findViewById(R.id.imageView6);
         //现金
-        mXianjin = (ImageView) findViewById(R.id.imageView5);
+        mXianjin = (Button) findViewById(R.id.imageView5);
         //zhifubao5
         mZhifu5 = (ImageView) findViewById(R.id.imageView4);
         //zhifubao2
         mZhifu2 = (ImageView) findViewById(R.id.imageView3);
         //支付二维码
         mQRCode = (ImageView) findViewById(R.id.imageView2);
+        //生产二维码状态
+        mTextv = (TextView) findViewById(R.id.textv2);
         //商品图片
         mProductIV = (ImageView) findViewById(R.id.imageView1);
-        mProductIV.setImageResource(mProductIDs[position]);
+        mProductIV.setImageResource(mProductID[position]);
         //现金图片1
         mXianjin1 = (ImageView) findViewById(R.id.xianjin1);
         //现金图片2
@@ -118,25 +147,37 @@ public class BuyActivity extends Activity {
         time = new TimeCount(60000, 1000);//构造CountDownTimer对象
         time.start();//开始计时
         //商品名称
-        TextView mProductName = (TextView) findViewById(R.id.productName);
+        TextView mProductNames = (TextView) findViewById(productName);
         TextView mProductChannel = (TextView) findViewById(R.id.productChannel);
         TextView mProductPrice = (TextView) findViewById(R.id.productPrice);
-        mProductName.setText(mProductNames[position]);
-        mProductChannel.setText("货道:" + mProductChnanels[position]);
-        mProductPrice.setText(mProductPrices[position] + "元");
-        mXianjin2.setVisibility(View.INVISIBLE);
-        mXianjin1.setVisibility(View.INVISIBLE);
+        mProductNames.setText(mProductName[position]);
+        mProductChannel.setText("货道:" + mProductChnanel[position]);
+        money=channelInfos.get(mProductChnanel[position]).getPrice();
+        money=money/100;
+        System.out.println("+channelInfos.get(mProductChnanel[position]).getPrice():"+channelInfos.get(mProductChnanel[position]).getPrice());
+        mProductPrice.setText( money+ "元");
+        mZhifu5.setVisibility(View.INVISIBLE);
+        mZhifu2.setVisibility(View.INVISIBLE);
+        mXianjin2.setVisibility(View.VISIBLE);
+        mXianjin1.setVisibility(View.VISIBLE);
+        mQRCode.setVisibility(View.INVISIBLE);
+        mXianjin2.setImageResource(R.mipmap.xianjin2);
+        mXianjin1.setImageResource(R.mipmap.xianjin1);
+        //发送投币指令
+        totalMoney=(int)(money*100);
+        mChannel=mProductChnanel[position];
+        byte[] bytes= FrameOrder.getBytesOutGoods(myApplication.spFrameNumber(),mChannel,totalMoney,0);
+        myApplication.sendToPort(bytes,"34");
+
     }
 
+    private double money;
     //微信扫码支付
     public void onWeiXin(View view) {
         mZhifu5.setVisibility(View.VISIBLE);
         mZhifu2.setVisibility(View.VISIBLE);
         mXianjin2.setVisibility(View.INVISIBLE);
         mXianjin1.setVisibility(View.INVISIBLE);
-        mWeixin.setImageResource(R.mipmap.weixin3);
-        mAlipay.setImageResource(R.mipmap.zhifubao4);
-        mXianjin.setImageResource(R.mipmap.xianjin4);
         mZhifu5.setImageResource(R.mipmap.weixin5);
         mZhifu2.setImageResource(R.mipmap.weixin2);
     }
@@ -147,22 +188,35 @@ public class BuyActivity extends Activity {
         mXianjin1.setVisibility(View.INVISIBLE);
         mZhifu5.setVisibility(View.VISIBLE);
         mZhifu2.setVisibility(View.VISIBLE);
-        mWeixin.setImageResource(R.mipmap.weixin4);
-        mAlipay.setImageResource(R.mipmap.zhifubao3);
-        mXianjin.setImageResource(R.mipmap.xianjin4);
         mZhifu5.setImageResource(R.mipmap.zhifubao5);
         mZhifu2.setImageResource(R.mipmap.zhifubao2);
-    }
+        if (TextUtils.isEmpty(QRurl))
+            createQR();
 
+    }
+    //向服务器请求二维码
+    private void createQR(){
+        String requset_qr_code="requset_qr_code&";
+        String productName=mProductName[position];
+        String totalMoney = money+"";
+        String channel=mProductChnanel[position];
+        String str=requset_qr_code+productName+"&"+totalMoney+"&"+channel;
+
+        try {
+            myApplication.sendMsg(str);
+        }catch (Exception e){
+            Message msg=Message.obtain();
+            msg.what=404;
+            mHandler.sendMessage(msg);
+        }
+    }
     //现金购买
     public void onXianjin(View view) {
         mZhifu5.setVisibility(View.INVISIBLE);
         mZhifu2.setVisibility(View.INVISIBLE);
         mXianjin2.setVisibility(View.VISIBLE);
         mXianjin1.setVisibility(View.VISIBLE);
-        mWeixin.setImageResource(R.mipmap.weixin4);
-        mAlipay.setImageResource(R.mipmap.zhifubao4);
-        mXianjin.setImageResource(R.mipmap.xianjin3);
+
         mXianjin2.setImageResource(R.mipmap.xianjin2);
         mXianjin1.setImageResource(R.mipmap.xianjin1);
     }
@@ -174,6 +228,16 @@ public class BuyActivity extends Activity {
     }
 
     public void onOutGoods(View view) {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(myReceiver);
+    }
+
+    public void kubi(View view) {
+        ToastUtil.show(this,"酷比购买正在开发中,近期将会上线,谢谢您的关注!");
     }
 
     class TimeCount extends CountDownTimer {
@@ -193,5 +257,85 @@ public class BuyActivity extends Activity {
         }
 
     }
+    private  String QRurl="";
+    private class MyOnReceiveMessage implements OnReceiveMessage {
+        @Override
+        public void receive(String message) {
+            Message msg=Message.obtain();
+            System.out.println("MyOnReceiveMessage1:"+message);
+             if (message.equals("outGoods"))
+                 msg.what=10;
+            else if (message.indexOf("response_qr_code=")==0){
+               QRurl=message.replace("response_qr_code=","");
+               if(QRurl.indexOf("http")==-1)
+                   msg.what=404;
+               else
+                   msg.what=1;
+           }
+            else if (message.indexOf("trade_status=WAIT_BUYER_PAY")==0)
+           {
+               System.out.println("MyOnReceiveMessage2:"+message);
+               msg.what=9;
+           }
+            mHandler.sendMessage(msg);
+        }
+    }
+    public  class MyReceiver extends BroadcastReceiver//作为内部类的广播接收者
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            String action = intent.getAction();
+            if (action.equals("tenray.outgoods.success"))
+            {
+                Message msg=Message.obtain();
+                msg.what=11;
+                mHandler.sendMessage(msg);
+                String data = intent.getStringExtra("tradedata");
+                System.out.println("PollingService:"+data);
+                Message msg2=Message.obtain();
+                msg2.what=12;
+                mHandler.sendMessageDelayed(msg2,5000);
+            }
+        }
+    }
+    private Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+               case 0:
 
+                    break;
+                case 1:
+                    initData();
+                    //生产支付二维码
+                    break;
+                case 404:
+                    mTextv.setText("网络异常...");
+                    //发送失败
+                    break;
+                case 9:
+                    //扫码成功等待支付
+                    mQRCode.setVisibility(View.INVISIBLE);
+                    mTextv.setText("扫码成功等待支付...");
+                    break;
+                case 10:
+                    //正在出货
+                    mQRCode.setVisibility(View.INVISIBLE);
+                    mTextv.setText("支付成功,正在出货...");
+                    break;
+                case 12:
+                    startActivity(new Intent(BuyActivity.this, GoodsActivity.class));
+                    time.cancel();
+                    finish();
+                    break;
+                case 11:
+                    //正在出货
+                    mQRCode.setVisibility(View.INVISIBLE);
+                    mTextv.setText("成功出货,请取货...");
+                    break;
+            }
+        }
+    };
 }

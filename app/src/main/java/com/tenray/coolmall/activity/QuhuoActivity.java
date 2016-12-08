@@ -77,8 +77,10 @@ public class QuhuoActivity extends Activity {
                    mBtnEd.setText(input);
                    break;
                case 20:
-                   input=  input.substring(0,input.length()-1);
-                   mBtnEd.setText(input);
+                   if(!TextUtils.isEmpty(input)) {
+                       input = input.substring(0, input.length() - 1);
+                       mBtnEd.setText(input);
+                   }
                    break;
                case 21:
                    input="";
@@ -88,7 +90,11 @@ public class QuhuoActivity extends Activity {
                    if (TextUtils.isEmpty(input))
                        ToastUtil.showTop(getApplicationContext(),"取货码不能为空!",0,150);
                    else
-                   ToastUtil.showTop(getApplicationContext(),"您输入的取货码不存在!",0,150);
+                   if(input.equals("#000000#"))
+                   {
+                       startActivity(new Intent(getApplicationContext(),ComActivity.class));
+                   }else
+                       ToastUtil.showTop(getApplicationContext(),"您输入的取货码不存在!",0,150);
                    break;
            }
        }

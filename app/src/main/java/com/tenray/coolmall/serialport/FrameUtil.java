@@ -86,6 +86,16 @@ public class FrameUtil {
         return toHexString((byte) (input & 0xff))+" "+toHexString((byte) ((input & 0xff00) >> 8))+" "
                 +toHexString((byte) ((input & 0xff0000) >> 16))+" "+toHexString((byte) ((input & 0xff000000) >> 24));
     }
+    public static int hiInt4String(String [] bytes){
+        // 拼装成 正确的int
+        return   Integer.parseInt(bytes[3]+bytes[2]+bytes[1]+bytes[0],16);
+    }
+
+    public static int hiInt2String(String [] bytes){
+        // 拼装成 正确的int
+        return   Integer.parseInt(bytes[1]+bytes[0],16);
+    }
+
     //双字节高低位
     public static String hiString2Bytes(int input){
         if(input>=65536)
@@ -148,16 +158,18 @@ public class FrameUtil {
 
    //判断返回的字符串是否完整
     public static boolean checkBack(String str){
-        if(str.length()<20)
+        if(str.length()<20||str.indexOf(FrameOrder.comHead)!=0) {
             return false;
+        }
         String a="";
         String b="";
         str=replase(str);
         b=getCRC(hexStringToBytes(str.substring(0,str .length()-4))).toUpperCase();
         a=str.substring(str.length()-4, str .length());
-       if ((a.toUpperCase()).equals(replase(b.toUpperCase())))
+       if (a.toUpperCase().equals(b.toUpperCase()))
            return true;
-        return false;
+        else
+           return false;
     }
 
     public static int nextInt() {

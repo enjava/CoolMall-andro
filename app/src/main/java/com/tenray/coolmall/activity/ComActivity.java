@@ -5,51 +5,119 @@ package com.tenray.coolmall.activity;
  */
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.tenray.coolmall.R;
+import com.tenray.coolmall.application.MyApplication;
+import com.tenray.coolmall.entity.ChannelInfo;
 import com.tenray.coolmall.serialport.FrameOrder;
-import com.tenray.coolmall.serialport.FrameUtil;
-import com.tenray.coolmall.serialport.SerialPortUtil;
 import com.tenray.coolmall.service.PollingService;
-import com.tenray.coolmall.util.Constants;
-import com.tenray.coolmall.util.LogWriterUtil;
 import com.tenray.coolmall.util.PollingUtils;
 import com.tenray.coolmall.util.SpUtil;
 import com.tenray.coolmall.util.ToastUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
+import java.util.Set;
 
 public class ComActivity extends Activity {
-    private LogWriterUtil mLogWriter;
-
     private static final String TAG = ComActivity.class.getSimpleName();
-    public static SerialPortUtil serialport = null;
-    private String backStr = "";
-    private EditText mBack_et;
-    private EditText mOrder_et;
-    private EditText mComName;
-    private CheckBox mcb;
-    private String comPath = "/dev/ttyS2";
-    private static int rollTimes;
-    //private boolean isStop = false;
+
+    private MyApplication myApplication;
+    private Button mbtnEd;
+    private  TextView mTv;
+    private  int churat=0;
+    private String input="";
+    private MyReceiver receiveBroadCast;  //广播实例
+    private String  mbtnEdText;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 0:
-                    // 弹出对话框,提示用户更新
-                    mBack_et.setText(FrameUtil.fomatStr16(backStr).toUpperCase());
-                    backStr = "";
+                case 1:
+                    input+="1";
+                    mbtnEd.setText(input);
+                    break;
+                case 2:
+                    input+="2";
+                    mbtnEd.setText(input);
+                    break;
+                case 3:
+                    input+="3";
+                    mbtnEd.setText(input);
+                    break;
+                case 4:
+                    input+="4";
+                    mbtnEd.setText(input);
+                    break;
+                case 5:
+                    input+="5";
+                    mbtnEd.setText(input);
+                    break;
+                case 6:
+                    input+="6";
+                    mbtnEd.setText(input);
+                    break;
+                case 7:
+                    input+="7";
+                    mbtnEd.setText(input);
+                    break;
+                case 8:
+                    input+="8";
+                    mbtnEd.setText(input);
+                    break;
+                case 10:
+                    input+="A";
+                    mbtnEd.setText(input);
+                    break;
+                case 11:
+                    input+="B";
+                    mbtnEd.setText(input);
+                    break;
+                case 12:
+                    input+="C";
+                    mbtnEd.setText(input);
+                    break;
+                case 13:
+                    input+="D";
+                    mbtnEd.setText(input);
+                    break;
+                case 14:
+                    input+="E";
+                    mbtnEd.setText(input);
+                    break;
+                case 15:
+                    input+="F";
+                    mbtnEd.setText(input);
+                    break;
+                case 101:
+                    churat=4;
+                    mTv.setText("支付宝扫码正在出货");
+                    outGoods();
+                    mbtnEd.setText(mbtnEdText);
+                    break;
+                case 102:
+                    churat=6;
+                    mTv.setText("微信扫码正在出货");
+                    outGoods();
+                    mbtnEd.setText(mbtnEdText);
+                    break;
+                case 104:
+                    mTv.setText("出货失败");
+                    mbtnEd.setText("");
+                    break;
+                case 110:
+                    mTv.setText("请选择支付方式");
+                    input="";
+                    mbtnEd.setText("");
                     break;
                 default:
                     Log.i(TAG, "测试");
@@ -58,142 +126,139 @@ public class ComActivity extends Activity {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_com);
-
-        File logf = new File(Environment.getExternalStorageDirectory()
-                + File.separator + "DemoLog.txt");
-
-        try {
-            mLogWriter = LogWriterUtil.open(logf.getAbsolutePath(),true);
-
-        } catch (IOException e) {
-            Log.d(TAG, e.getMessage());
-        }
-        mBack_et = (EditText) findViewById(R.id.editText3);
-        mOrder_et = (EditText) findViewById(R.id.editText4);
-        mComName = (EditText) findViewById(R.id.dtced);
-        mcb = (CheckBox) findViewById(R.id.cb);
-
-        PollingUtils.startPollingService(this, 500, PollingService.class, PollingService.ACTION);
-    }
-
-    public void sendComand(View v) {
-        if (serialport == null) {
-            initSerialport(comPath);
-        }
-        if (serialport.getmSerialPort() == null) {
-            initSerialport(comPath);
-            ToastUtil.show(this, "串口打开失败，请检查串口设置是否正确");
-            return;
-        }
-        String orderStr = mOrder_et.getText().toString();
-        if (FrameUtil.isEmpty(orderStr)) {
-            ToastUtil.show(this, "发送命令不能为空");
-            return;
-        }
-        try {
-            if (mcb.isChecked())
-                serialport.sendToPort(FrameUtil.hexStringToBytes(FrameUtil.getCRCStr(orderStr)));
-            else
-                serialport.sendToPort(FrameUtil.hexStringToBytes(orderStr));
-        } catch (Exception e) {
-            ToastUtil.show(this, "发送命令失败");
-        }
-    }
-
-    //同步时间
-    public void synTime(View v) {
-        if (serialport == null) {
-            initSerialport(comPath);
-        }
-        if (serialport.getmSerialPort() == null) {
-            initSerialport(comPath);
-            ToastUtil.show(this, "串口打开失败，请检查串口设置是否正确");
-            return;
-        }
-        int itimes = SpUtil.getInt(this, Constants.FRAME_NUMBER, 0);
-        String ml = FrameOrder.getSynTime(itimes, new Date());
-        byte[] abc = FrameUtil.hexStringToBytes(FrameUtil.getCRCStr(ml));
-        if (itimes > 65000)
-            itimes = 0;
-        SpUtil.putInt(this, Constants.FRAME_NUMBER, ++itimes);
-        try {
-            //  backStr = "";
-            serialport.sendToPort(abc);
-        } catch (Exception e) {
-            ToastUtil.show(this, "更改时间失败");
-        }
-
-    }
-
-    //初始化串口
-    public void initSerialport(String comName) {
-        serialport = SerialPortUtil.getInstance(comName);
-        serialport.setOnDataReceiveListener(new SerialPortUtil.OnDataReceiveListener() {
-            @Override
-            public void onDataReceive(byte[] buffer, int size) {
-                byte[] byt = new byte[size];
-                for (int i = 0; i < size; i++) {
-                    byt[i] = buffer[i];
-                }
-                String stringBack = FrameUtil.fomatStr16(FrameUtil.bytesToHexString(byt)).toUpperCase() + " ";
-                //log("stringBack:"+stringBack);
-                //仅检查头是不够的,有可能发送 45  或者45 46
-                if (stringBack.indexOf(FrameOrder.comHead) == 0)
-                    backStr = "";
-                backStr += stringBack;
-                //log("backStr:"+backStr);
-                if (FrameUtil.checkBack(backStr)) {
-                    String arg = backStr.trim();
-                    Message msg = Message.obtain();
-                    msg.what = 0;
-                    mHandler.sendMessage(msg);
-                    String[] args = arg.split(" ");
-                    if (args.length > 4 && args[5].equals("02")) {
-                        if (mLogWriter != null)
-                            log(arg);
-                    }
-                }
-
-            }
-        });
-
-        if (serialport.getmSerialPort() != null) {
-            new PollingService().setSerialport(serialport);
-        }
+        myApplication= (MyApplication) this.getApplication();
+        mbtnEd= (Button) findViewById(R.id.btn_ed);
+        mTv= (TextView) findViewById(R.id.tv2);
+        // 注册广播接收
+        receiveBroadCast = new MyReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("tenray.outgoods.success");    //只有持有相同的action的接受者才能接收此广播
+        registerReceiver(receiveBroadCast, filter);
 
     }
 
     @Override
     protected void onDestroy() {
+        myApplication.log("关闭串口");
         //关闭串口
-        if (serialport != null)
-            serialport.closeSerialPort();
-
-        PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
+       PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
+        unregisterReceiver(receiveBroadCast);
         super.onDestroy();
     }
 
-    public void setComName(View view) {
-        comPath = mComName.getText().toString().trim();
-        if (serialport != null) {
-            serialport.closeSerialPort();
-            initSerialport(comPath);
-        } else {
-            initSerialport(comPath);
+    public void outGoods() {
+
+       Set<String> sets= SpUtil.getSet(this,input,null);
+        if (sets!=null) {
+            ChannelInfo channelInfo = new ChannelInfo(sets);
+            int price = channelInfo.getPrice();
+            String fra = FrameOrder.getOutGoods(myApplication.spFrameNumber(), input, price, churat);
+            byte[] bytes = FrameOrder.getBytesOutGoods(myApplication.spFrameNumber(), input, price, churat);
+            myApplication.log("出货调用前");
+           boolean reuslt=  myApplication.sendToPort(bytes, "34");
+            if (! reuslt){
+                Message msg=Message.obtain();
+                msg.what=104;
+                mHandler.sendMessage(msg);
+            }
+            myApplication.log("出货调用后");
+            System.out.println(fra);
         }
-        ToastUtil.show(this, "串口更改成功");
+        else {
+            ToastUtil.showTop(this,"货道选择错误",0,150);
+            Message msg=Message.obtain();
+            msg.what=110;
+            mHandler.sendMessage(msg);
+        }
+
+    }
+    //清除事件
+    public void cleanEvent(View view){
+        byte[] bytes=FrameOrder.getBytesCleanUpGoods(myApplication.spFrameNumber());
+        myApplication.log("清除事件被调用前");
+        myApplication.sendToPort(bytes,"38");
+        myApplication.log("清除事件被调用后");
     }
 
-    public void log(String msg) {
-        try {
-            mLogWriter.print(msg);
-        } catch (IOException e) {
-            Log.d(TAG, e.getMessage());
+    public void onClick(View view) {
+        Message msg=Message.obtain();
+        switch (view.getId()){
+            case R.id.buttonA:
+                msg.what=10;
+                break;
+            case R.id.buttonB:
+                msg.what=11;
+                break;
+            case R.id.buttonC:
+                msg.what=12;
+                break;
+            case R.id.buttonD:
+                msg.what=13;
+                break;
+            case R.id.buttonE:
+                msg.what=14;
+                break;
+            case R.id.buttonF:
+                msg.what=15;
+                break;
+            case R.id.button1:
+                msg.what=1;
+                break;
+            case R.id.button2:
+                msg.what=2;
+                break;
+            case R.id.button3:
+                msg.what=3;
+                break;
+            case R.id.button4:
+                msg.what=4;
+                break;
+            case R.id.button5:
+                msg.what=5;
+                break;
+            case R.id.button6:
+                msg.what=6;
+                break;
+            case R.id.button7:
+                msg.what=7;
+                break;
+            case R.id.button8:
+                msg.what=8;
+                break;
+            case R.id.btn_weixin:
+                msg.what=102;
+                break;
+            case R.id.btn_alipay:
+                msg.what=101;
+                break;
+            default:
+                Log.i(TAG, "测试onClick");
+                break;
+        }
+        mHandler.sendMessage(msg);
+    }
+
+    public  class MyReceiver extends BroadcastReceiver//作为内部类的广播接收者
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            String action = intent.getAction();
+            if (action.equals("tenray.outgoods.success"))
+            {
+                String data = intent.getStringExtra("tradedata");
+                System.out.println(TAG+data);
+                mTv.setText("出货成功");
+                Message msg=Message.obtain();
+                msg.what=110;
+                mHandler.sendMessageDelayed(msg,2000);
+                //ToastUtil.show(ComActivity.this,"出货成功");
+            }
         }
     }
 }

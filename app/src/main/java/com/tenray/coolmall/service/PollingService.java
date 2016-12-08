@@ -1,11 +1,19 @@
 package com.tenray.coolmall.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 
+import com.tenray.coolmall.application.MyApplication;
 import com.tenray.coolmall.serialport.FrameOrder;
-import com.tenray.coolmall.serialport.SerialPortUtil;
+import com.tenray.coolmall.serialport.FrameUtil;
+
+import java.util.List;
+
+import android_serialport_api.SerialPort;
 
 
 /**
@@ -15,12 +23,12 @@ import com.tenray.coolmall.serialport.SerialPortUtil;
 
 public class PollingService extends Service {
     public static final String ACTION = "com.tenray.coolmall.service.PollingService";
-    public static SerialPortUtil serialport = null;
-//    private Notification mNotification;
-//    private NotificationManager mManager;
-
-    private static int rollTimes =10000;
-
+   private List<String> channels;
+    private int listSize=-1;
+    private static int rollTimes = FrameUtil.nextInt();
+    private MyApplication myApplication;
+    private  SerialPort serialPort=null;
+    private PollReceiver pollReceiver;  //广播实例
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -28,40 +36,62 @@ public class PollingService extends Service {
 
     @Override
     public void onCreate() {
-       // initNotifiManager();
+
         super.onCreate();
+        myApplication = (MyApplication) getApplication();
+
+        // 注册广播接收
+        pollReceiver = new PollReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("tenray.outgoods.success");    //只有持有相同的action的接受者才能接收此广播
+        registerReceiver(pollReceiver, filter);
+    }
+    @Override
+    public boolean onUnbind(Intent intent)
+    {
+         unregisterReceiver(pollReceiver);
+        System.out.println("Service:onUnbind");
+        return super.onUnbind(intent);
     }
 
     @Override
-    public int  onStartCommand(Intent intent, int flags, int startId) {
-         new PollingThread().start();
-        return super.onStartCommand(intent,flags,startId);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        new PollingThread().start();
+        return super.onStartCommand(intent, flags, startId);
     }
 
 
     //初始化通知栏配置
     private void initNotifiManager() {
-//        mManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        int icon = R.mipmap.ic_launcher;
-//        mNotification = new Notification();
-//        mNotification.icon = icon;
-//        mNotification.tickerText = "New Message";
-//        mNotification.defaults |= Notification.DEFAULT_SOUND;
-//        mNotification.flags = Notification.FLAG_AUTO_CANCEL;
+
     }
-
-    //弹出Notification
     private void sendRollCommand() {
+        if (serialPort==null)
+        {
+            if (myApplication.serialport!=null)
+                serialPort=myApplication.serialport.getmSerialPort();
+            return;
+        }
         rollTimes++;
-        if (rollTimes>65500)
-            rollTimes=0;
+        if (rollTimes > 65500)
+            rollTimes = 0;
         try {
-            byte[] bytes = FrameOrder.getBytesRoll(rollTimes);
-            if (serialport.getmSerialPort() != null)
-                serialport.sendToPort(bytes);
-            //Thread.sleep(200);
-        } catch (Exception e) {
+            if (listSize==-1||channels.size()>(listSize+1)){
+                channels=  myApplication.getChannels();
+                if (channels!=null){
+                    listSize++;
+                    byte[] bytes = FrameOrder.getBytesPanel(rollTimes,channels.get(listSize));
+                    myApplication.sendToPort(bytes, "30");
 
+                }
+            }
+            else {
+                    //发送交易数据给主板
+                    byte[] bytes = FrameOrder.getBytesTradeDate(rollTimes);
+                    myApplication.sendToPort(bytes, "36");
+            }
+        } catch (Exception e) {
+            System.out.println("aaaaaaaaaaaaaaaaaaa");
         }
     }
 
@@ -79,20 +109,28 @@ public class PollingService extends Service {
         public void run() {
             sendRollCommand();
             count++;
-    //当除计数能被5整时弹出通知
-            if (count % 5 == 0) {
-                System.out.println("New message!"+count);
+            //当除计数能被5整时弹出通知
+            if (count % 50 == 0) {
+                System.out.println("New message!" + count);
             }
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        System.out.println("Service:onDestroy");
-    }
 
-    public void setSerialport(SerialPortUtil serialport) {
-        this.serialport = serialport;
+    public  class PollReceiver extends BroadcastReceiver//作为内部类的广播接收者
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            String action = intent.getAction();
+            if (action.equals("tenray.outgoods.success"))
+            {
+                String data = intent.getStringExtra("tradedata");
+                System.out.println("PollingService:"+data);
+                myApplication.log(data);
+                //也可以终止广播,权限小的接收者就接收不到广播了
+               // abortBroadcast();
+            }
+        }
     }
 }

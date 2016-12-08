@@ -15,7 +15,7 @@ public class Md5Util {
 	public static String encoder(String psd) {
 		try {
 			// 加盐处理
-			psd = psd + "MD5加密加盐9w7coolmall";
+			psd = psd + "MD5加密加盐mobile";
 			// 1,指定加密算法类型
 			MessageDigest digest = MessageDigest.getInstance("MD5");
 			// 2,将需要加密的字符串中转换成byte类型的数组,然后进行随机哈希过程
@@ -28,7 +28,7 @@ public class Md5Util {
 				int i = b & 0xff;
 				// int类型的i需要转换成16机制字符
 				String hexString = Integer.toHexString(i);
-				//System.out.println(hexString);
+				// System.out.println(hexString);
 				if (hexString.length() < 2) {
 					hexString = "0" + hexString;
 				}
@@ -42,4 +42,26 @@ public class Md5Util {
 		}
 		return "";
 	}
+
+	public static String getMachineID(String m_szLongID){
+		MessageDigest m = null;
+		try {
+			m = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		m.update(m_szLongID.getBytes(),0,m_szLongID.length());
+		byte p_md5Data[] = m.digest();
+		String m_szUniqueID = new String();
+		for (int i=0;i<p_md5Data.length;i++) {
+			int b =  (0xFF & p_md5Data[i]);
+			if (b <= 0xF)
+				m_szUniqueID+="0";
+			m_szUniqueID+=Integer.toHexString(b);
+		}
+		m_szUniqueID = m_szUniqueID.toUpperCase();
+		return m_szUniqueID;
+	}
+
+
 }

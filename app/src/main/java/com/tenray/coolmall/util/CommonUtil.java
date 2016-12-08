@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class CommonUtil {
 
@@ -277,9 +278,15 @@ public class CommonUtil {
 	}
 
 	public static String formatDate(String format) {
-		//"yyyy-MM-dd HH:mm"
+		//"yyyy-MM-dd HH:mm:ss:SSS"
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		return sdf.format(new Date());
+	}
+
+	public static int nextInt() {
+		Random rand = new Random();
+		int tmp = Math.abs(rand.nextInt());
+		return tmp % (65000 - 1000 + 1) + 1000;
 	}
 
 }

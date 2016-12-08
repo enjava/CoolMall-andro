@@ -282,36 +282,36 @@
         </LinearLayout>
 
     </LinearLayout>
-    <ImageView
+    <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/goumai"
+        android:background="@drawable/me_goumai_selector"
         android:id="@+id/imageView5"
         android:scaleType="centerInside"
-        android:onClick="goumai"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="320dp"
         android:layout_marginBottom="50dp"
         />
-    <ImageView
+    <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/quhuo1"
+        android:background="@drawable/me_quhuo_selector"
         android:id="@+id/imageView6"
+        android:onClick="quhuo"
         android:layout_marginBottom="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
-    <ImageView
+    <Button
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/bangzhu"
+        android:background="@drawable/me_bangzhu_selector"
         android:id="@+id/imageView7"
         android:layout_alignParentBottom="true"
         android:onClick="bangzhu"
         android:layout_marginRight="320dp"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="50dp" />
+
 
     <Button
         android:layout_width="wrap_content"
