@@ -14,8 +14,6 @@ import android.widget.VideoView;
 
 import com.tenray.coolmall.R;
 import com.tenray.coolmall.animation.ButtonAnimation;
-import com.tenray.coolmall.service.PollingService;
-import com.tenray.coolmall.util.PollingUtils;
 
 ;
 
@@ -58,13 +56,14 @@ public class MainActivity extends Activity implements OnClickListener {
         });
         infoOperatingIV = (ImageView) findViewById(R.id.anim_iv);
         anima();
+
     }
 
 
     public void anima(){
         if (infoOperatingIV==null)
             return;
-        ButtonAnimation rotation = new ButtonAnimation(360, 0,50,  0, 310.0f, false);
+        ButtonAnimation rotation = new ButtonAnimation(360, 0,90,  0, 310.0f, false);
         rotation.setDuration(3000);//动画持续时间
         rotation.setFillAfter(true);
         rotation.setInterpolator(new DecelerateInterpolator());//设置加速度
@@ -80,15 +79,10 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.anim_iv:
                 Intent intent=new Intent(this,GoodsActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
 
     }
 
-    @Override
-    protected void onDestroy() {
-        PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
-
-        super.onDestroy();
-    }
 }

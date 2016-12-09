@@ -107,6 +107,8 @@ public class BuyActivity extends Activity {
         IntentFilter filter = new IntentFilter();
         filter.addAction("tenray.outgoods.success");    //只有持有相同的action的接受者才能接收此广播
         registerReceiver(myReceiver, filter);
+
+
     }
 
     private void initData() {
@@ -233,7 +235,9 @@ public class BuyActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        myApplication.setOnReceiveMessage(null);
         unregisterReceiver(myReceiver);
+
     }
 
     public void kubi(View view) {
@@ -286,16 +290,21 @@ public class BuyActivity extends Activity {
         public void onReceive(Context context, Intent intent)
         {
             String action = intent.getAction();
-            if (action.equals("tenray.outgoods.success"))
+            if ("tenray.outgoods.success".equals(action))
             {
-                Message msg=Message.obtain();
-                msg.what=11;
-                mHandler.sendMessage(msg);
+
                 String data = intent.getStringExtra("tradedata");
-                System.out.println("PollingService:"+data);
-                Message msg2=Message.obtain();
-                msg2.what=12;
-                mHandler.sendMessageDelayed(msg2,5000);
+                System.out.println("BroadcastReceiverBuyActivity:"+data);
+                if (TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
+                    Message msg = Message.obtain();
+                    msg.what = 11;
+                    mHandler.sendMessage(msg);
+
+                    System.out.println("PollingService:" + data);
+                    Message msg2 = Message.obtain();
+                    msg2.what = 12;
+                    mHandler.sendMessageDelayed(msg2, 5000);
+                }
             }
         }
     }
@@ -326,8 +335,8 @@ public class BuyActivity extends Activity {
                     mTextv.setText("支付成功,正在出货...");
                     break;
                 case 12:
-                    startActivity(new Intent(BuyActivity.this, GoodsActivity.class));
                     time.cancel();
+                    startActivity(new Intent(BuyActivity.this, GoodsActivity.class));
                     finish();
                     break;
                 case 11:

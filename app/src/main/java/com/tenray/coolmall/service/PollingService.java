@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.text.TextUtils;
 
 import com.tenray.coolmall.application.MyApplication;
 import com.tenray.coolmall.serialport.FrameOrder;
@@ -82,7 +83,6 @@ public class PollingService extends Service {
                     listSize++;
                     byte[] bytes = FrameOrder.getBytesPanel(rollTimes,channels.get(listSize));
                     myApplication.sendToPort(bytes, "30");
-
                 }
             }
             else {
@@ -126,10 +126,10 @@ public class PollingService extends Service {
             if (action.equals("tenray.outgoods.success"))
             {
                 String data = intent.getStringExtra("tradedata");
-                System.out.println("PollingService:"+data);
-                myApplication.log(data);
-                //也可以终止广播,权限小的接收者就接收不到广播了
-               // abortBroadcast();
+                if (TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
+                    System.out.println("PollingService:" + data);
+                    myApplication.log(data);
+                }
             }
         }
     }

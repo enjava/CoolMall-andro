@@ -126,8 +126,13 @@ public class MyApplication extends Application {
         }
     };
     //分析交易数据(轮询)
+    long i36=0;
     private void analysisTradeData() {
+        i36++;
+
         String str = returnStr;
+        if (i36%11==0)
+            System.out.println(str+"i36:"+i36);
         String[] args = str.split(" ");
         String[] num = new String[]{args[8], args[9], args[10], args[11]};
         String[] price = new String[]{args[12], args[13], args[14], args[15]};
@@ -179,7 +184,7 @@ public class MyApplication extends Application {
         mHandler.sendMessage(msg);
         initChannel();
 
-        PollingUtils.startPollingService(this, 700, PollingService.class, PollingService.ACTION);
+        PollingUtils.startPollingService(this, 500, PollingService.class, PollingService.ACTION);
   }
 
     //初始化货道
