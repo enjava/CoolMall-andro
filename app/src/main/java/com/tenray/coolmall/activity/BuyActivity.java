@@ -34,10 +34,6 @@ import static com.tenray.coolmall.R.id.productName;
  */
 
 public class BuyActivity extends Activity {
-
-    private Button mAlipay;
-    private Button mWeixin;
-    private Button mXianjin;
     private ImageView mZhifu5;
     private ImageView mZhifu2;
     private ImageView mQRCode;
@@ -110,26 +106,45 @@ public class BuyActivity extends Activity {
 
 
     }
-
+   //支付宝
     private void initData() {
-        if(!TextUtils.isEmpty(QRurl)) {
-            Bitmap bm = QRCodeUtil.createBitmap(QRurl);
+        if(bmal==null&&!TextUtils.isEmpty(QRurl)) {
+             bmal = QRCodeUtil.createBitmap(QRurl);
             //Bitmap logo = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
             //Bitmap QRCode = QRCodeUtil.addLogo(bm, bm);
             mQRCode.setVisibility(View.VISIBLE);
             mTextv.setText("");
-            mQRCode.setImageBitmap(bm);
+            mQRCode.setImageBitmap(bmal);
+        }  else  if(bmal!=null) {
+            mQRCode.setVisibility(View.VISIBLE);
+            mTextv.setText("");
+            mQRCode.setImageBitmap(bmal);
+        }else {
+            mQRCode.setVisibility(View.INVISIBLE);
+        }
+    }
+    private Bitmap bmal;
+    private  Bitmap bmwx;
+    //微信初始化
+    private void initData2() {
+        if(bmwx==null&&!TextUtils.isEmpty(WXQRurl)) {
+            bmwx = QRCodeUtil.createBitmap(WXQRurl);
+            mQRCode.setVisibility(View.VISIBLE);
+            mTextv.setText("");
+            mQRCode.setImageBitmap(bmwx);
+        }
+        else  if(bmwx!=null) {
+            mQRCode.setVisibility(View.VISIBLE);
+            mTextv.setText("");
+            mQRCode.setImageBitmap(bmwx);
+        }else {
+            mQRCode.setVisibility(View.INVISIBLE);
         }
     }
     private  String  mChannel="";
     private int  totalMoney;
     public void init() {
-        //支付宝
-        mAlipay = (Button) findViewById(R.id.imageView7);
-        //微信
-        mWeixin = (Button) findViewById(R.id.imageView6);
-        //现金
-        mXianjin = (Button) findViewById(R.id.imageView5);
+
         //zhifubao5
         mZhifu5 = (ImageView) findViewById(R.id.imageView4);
         //zhifubao2
@@ -176,16 +191,25 @@ public class BuyActivity extends Activity {
     private double money;
     //微信扫码支付
     public void onWeiXin(View view) {
+        if (mtbot)
+            return;
         mZhifu5.setVisibility(View.VISIBLE);
         mZhifu2.setVisibility(View.VISIBLE);
         mXianjin2.setVisibility(View.INVISIBLE);
         mXianjin1.setVisibility(View.INVISIBLE);
         mZhifu5.setImageResource(R.mipmap.weixin5);
         mZhifu2.setImageResource(R.mipmap.weixin2);
+        if (TextUtils.isEmpty(WXQRurl))
+            createQR("requset_wxqr_code&");
+        else
+           // initData2
+        initData2();
     }
 
     //支付宝扫码支付
     public void onAlipay(View view) {
+        if (mtbot)
+            return;
         mXianjin2.setVisibility(View.INVISIBLE);
         mXianjin1.setVisibility(View.INVISIBLE);
         mZhifu5.setVisibility(View.VISIBLE);
@@ -193,27 +217,31 @@ public class BuyActivity extends Activity {
         mZhifu5.setImageResource(R.mipmap.zhifubao5);
         mZhifu2.setImageResource(R.mipmap.zhifubao2);
         if (TextUtils.isEmpty(QRurl))
-            createQR();
+            createQR("requset_qr_code&");
+        else
+          initData();
 
     }
     //向服务器请求二维码
-    private void createQR(){
-        String requset_qr_code="requset_qr_code&";
+    private void createQR(String requset_qr_code){
+        //String requset_qr_code="requset_qr_code&";
         String productName=mProductName[position];
         String totalMoney = money+"";
         String channel=mProductChnanel[position];
         String str=requset_qr_code+productName+"&"+totalMoney+"&"+channel;
-
-        try {
+        if (myApplication.isSocketConnect())
             myApplication.sendMsg(str);
-        }catch (Exception e){
-            Message msg=Message.obtain();
-            msg.what=404;
+        else {
+            Message msg = Message.obtain();
+            msg.what = 404;
             mHandler.sendMessage(msg);
         }
+
     }
     //现金购买
     public void onXianjin(View view) {
+        if (mtbot)
+            return;
         mZhifu5.setVisibility(View.INVISIBLE);
         mZhifu2.setVisibility(View.INVISIBLE);
         mXianjin2.setVisibility(View.VISIBLE);
@@ -235,7 +263,6 @@ public class BuyActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        myApplication.setOnReceiveMessage(null);
         unregisterReceiver(myReceiver);
 
     }
@@ -261,7 +288,10 @@ public class BuyActivity extends Activity {
         }
 
     }
+    //支付宝连接
     private  String QRurl="";
+    //微信连接
+    private  String WXQRurl="";
     private class MyOnReceiveMessage implements OnReceiveMessage {
         @Override
         public void receive(String message) {
@@ -276,6 +306,13 @@ public class BuyActivity extends Activity {
                else
                    msg.what=1;
            }
+             else if (message.indexOf("response_wxqr_code=")==0){
+                 WXQRurl=message.replace("response_wxqr_code=","");
+                 if(WXQRurl.indexOf("weixin")==-1)
+                     msg.what=404;
+                 else
+                     msg.what=2;
+             }
             else if (message.indexOf("trade_status=WAIT_BUYER_PAY")==0)
            {
                System.out.println("MyOnReceiveMessage2:"+message);
@@ -295,7 +332,7 @@ public class BuyActivity extends Activity {
 
                 String data = intent.getStringExtra("tradedata");
                 System.out.println("BroadcastReceiverBuyActivity:"+data);
-                if (TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
+                if (!TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
                     Message msg = Message.obtain();
                     msg.what = 11;
                     mHandler.sendMessage(msg);
@@ -308,16 +345,20 @@ public class BuyActivity extends Activity {
             }
         }
     }
+    private  boolean mtbot=false;
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                case 0:
-
                     break;
                 case 1:
                     initData();
+                    //生产支付二维码
+                    break;
+                case 2:
+                    initData2();
                     //生产支付二维码
                     break;
                 case 404:
@@ -332,6 +373,7 @@ public class BuyActivity extends Activity {
                 case 10:
                     //正在出货
                     mQRCode.setVisibility(View.INVISIBLE);
+                    mtbot=true;
                     mTextv.setText("支付成功,正在出货...");
                     break;
                 case 12:
@@ -342,6 +384,7 @@ public class BuyActivity extends Activity {
                 case 11:
                     //正在出货
                     mQRCode.setVisibility(View.INVISIBLE);
+                    mtbot=false;
                     mTextv.setText("成功出货,请取货...");
                     break;
             }

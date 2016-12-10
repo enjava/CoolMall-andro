@@ -75,13 +75,18 @@ public class MainActivity extends Activity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.anim_iv:
-                Intent intent=new Intent(this,GoodsActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-        }
+//        switch (v.getId()){
+//            case R.id.anim_iv:
+//                Intent intent=new Intent(this,GoodsActivity.class);
+//                startActivity(intent);
+//                finish();
+//                break;
+//        }
+
+        Intent intent=new Intent(this,GoodsActivity.class);
+        startActivity(intent);
+        finish();
+       // break;
 
     }
 

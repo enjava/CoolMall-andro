@@ -119,7 +119,7 @@ public class QuhuoActivity extends Activity {
     private void initUI(){
         mBtnEd = (Button) findViewById(R.id.btn_ed);
         mReback = (Button) findViewById(R.id.reback);
-        time = new TimeCount(60000, 1000);//构造CountDownTimer对象
+        time = new TimeCount(30000, 1000);//构造CountDownTimer对象
         time.start();//开始计时
     }
 

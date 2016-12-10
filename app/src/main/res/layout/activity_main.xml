@@ -71,6 +71,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/fl"
         android:scaleType="fitXY"
+        android:onClick="onClick"
         android:src="@mipmap/m625177391252266721" />
     
       <ImageView
@@ -78,6 +79,7 @@
         android:layout_height="180dp"
         android:scaleType="centerInside"
         android:src="@mipmap/buybg"
+          android:visibility="gone"
         android:id="@+id/infoOperating"
         android:layout_marginRight="36dp"
         android:layout_centerVertical="true"
@@ -90,8 +92,21 @@
         android:scaleType="centerInside"
         android:src="@mipmap/buyup"
         android:id="@+id/anim_iv"
-        android:onClick="onClick"
+       android:visibility="gone"
         android:layout_alignTop="@+id/infoOperating"
         android:layout_alignLeft="@+id/infoOperating"
         android:layout_alignStart="@+id/infoOperating" />
+
+    <Button
+        android:text="Button01"
+        android:id="@+id/Button01"
+        android:layout_width="880dp"
+        android:layout_height="180dp"
+        android:onClick="onClick"
+        android:visibility="gone"
+        android:layout_marginRight="46dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="#00000000"
+        />
 </RelativeLayout>

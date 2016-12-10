@@ -48,7 +48,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class MyApplication extends Application {
-    private MyWebSocketClient webSocketClient;
+    private  MyWebSocketClient webSocketClient;
 
     private  OnReceiveMessage onReceiveMessage;
     public SerialPortUtil serialport = null;
@@ -83,6 +83,7 @@ public class MyApplication extends Application {
     private static final int CLEAN_UPGOODS_EVENT = 38;
     //上位机通知主板写货道数据到存储器
     private static final int WRITE_DATA_STORAGE = 39;
+    private static String appkey;
     private String comPath;
     private Handler mHandler = new Handler() {
         @Override
@@ -128,16 +129,19 @@ public class MyApplication extends Application {
     //分析交易数据(轮询)
     long i36=0;
     private void analysisTradeData() {
-        i36++;
-
         String str = returnStr;
-        if (i36%11==0)
+        if (i36%33==0)
             System.out.println(str+"i36:"+i36);
+        i36++;
         String[] args = str.split(" ");
+        if (args.length<24)
+            return;
         String[] num = new String[]{args[8], args[9], args[10], args[11]};
         String[] price = new String[]{args[12], args[13], args[14], args[15]};
         String channel = args[16];
         String[] payTypes = new String[]{args[20], args[21], args[22], args[23]};
+        if (!"36".equals(args[5]))
+            return;
         //流水号
         int number = FrameUtil.hiInt4String(num);
         int mPrice = FrameUtil.hiInt4String(price);
@@ -205,7 +209,7 @@ public class MyApplication extends Application {
 
             @Override
             public void run() {
-                String appkey=SpUtil.getString(MyApplication.this,Constants.MACHINE_ID,"");
+                appkey=SpUtil.getString(MyApplication.this,Constants.MACHINE_ID,"");
                 if (TextUtils.isEmpty(appkey)) {
                     appkey = getMachineID();
                     SpUtil.putString(MyApplication.this, Constants.MACHINE_ID, getMachineID());
@@ -219,13 +223,19 @@ public class MyApplication extends Application {
                     else
                         channelInfos.put(mProductChnanels[i],new ChannelInfo(sets));
                 }
-                webSocketClient =MyWebSocketClient.initClient(appkey);
-                webSocketClient.setOnReceiveWebSocketMessage(new MyOnReceiveWebSocketMessage());
-                System.out.println("appkey="+appkey);
+                initWebSocketClient();
             }
 
         }.start();
 
+    }
+    public void initWebSocketClient()
+    {
+        if (!TextUtils.isEmpty(appkey)) {
+            webSocketClient = MyWebSocketClient.initClient(appkey);
+            webSocketClient.setOnReceiveWebSocketMessage(new MyOnReceiveWebSocketMessage());
+            System.out.println("appkey=" + appkey);
+        }
     }
 
     //初始化 log
@@ -428,7 +438,7 @@ public class MyApplication extends Application {
         String szImei = TelephonyMgr.getDeviceId();
 
         //2
-        String m_szDevIDShort = "16" + //we make this look like a valid IMEI
+        String m_szDevIDShort = "86" + //we make this look like a valid IMEI
 
                 Build.BOARD.length()%10 +
                 Build.BRAND.length()%10 +
@@ -463,7 +473,8 @@ public class MyApplication extends Application {
         return channelInfos;
     }
 
-    public void  sendMsg(String msg) throws Exception{
+
+    public void  sendMsg(String msg) {
         webSocketClient.sendMsg(msg);
     }
 
@@ -478,7 +489,8 @@ public class MyApplication extends Application {
                String []args=msg.split("&");
                int  totalMoney=(int)(Double.parseDouble(args[2])*100);
                String  channel=args[3];
-               byte[] bytes=FrameOrder.getBytesOutGoods(spFrameNumber(),channel,totalMoney,4);
+               String payType=args[4];
+               byte[] bytes=FrameOrder.getBytesOutGoods(spFrameNumber(),channel,totalMoney,Integer.parseInt(payType));
                if (onReceiveMessage!=null)
                    onReceiveMessage.receive("outGoods");
                sendToPort(bytes,"34");
@@ -493,6 +505,10 @@ public class MyApplication extends Application {
            }
        }
    }
+
+    public boolean isSocketConnect(){
+        return webSocketClient.isOpen()&&!webSocketClient.isClosed();
+    }
 
     public void setOnReceiveMessage(OnReceiveMessage onReceiveMessage) {
         this.onReceiveMessage = onReceiveMessage;

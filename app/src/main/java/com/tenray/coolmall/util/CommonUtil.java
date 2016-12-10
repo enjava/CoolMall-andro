@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -290,8 +291,14 @@ public class CommonUtil {
 		int tmp = Math.abs(rand.nextInt());
 		return tmp % (65000 - 1000 + 1) + 1000;
 	}
-public static  int getMinute(){
-	long l= System.currentTimeMillis();
-	return 0;
+public static  int getMinute(Date oldDate){
+	Calendar dateOne=Calendar.getInstance(),dateTwo=Calendar.getInstance();
+	dateOne.setTime(new Date());	//设置为当前系统时间
+	dateTwo.setTime(oldDate);			//设置为需要比较的时间
+	long timeOne=dateOne.getTimeInMillis();
+	long timeTwo=dateTwo.getTimeInMillis();
+	int  minute=(int)((timeOne-timeTwo)/(1000*60));//转化minute
+	//System.out.println("相隔"+minute+"分钟");
+	return minute;
 }
 }

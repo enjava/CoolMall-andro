@@ -216,7 +216,6 @@ public class FrameOrder {
         String orderNum = " 34 ";
         //DATA
         //    A1 00 00 00       64 00 00 00      02 00 00 00     00 00 00 00      31 32 33 34 30 00 CB 64
-        /* 1. 4 字节货道编号 2.  4 字节货道价格 3. 4 字节商品ID  4. 4 字节支付方式 4.交易编号，长度不能超过31 个字节，以null 结尾*/
         String channelFrame = " " + channel + " 00 00 00 ";
         String priceFrame = FrameUtil.hiString4Bytes(price) + " ";
         String productId="00 00 00 00 ";

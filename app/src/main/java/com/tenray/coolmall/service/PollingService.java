@@ -79,14 +79,18 @@ public class PollingService extends Service {
         try {
             if (listSize==-1||channels.size()>(listSize+1)){
                 channels=  myApplication.getChannels();
-                if (channels!=null){
-                    listSize++;
+                listSize++;
+                if (channels!=null&&channels.size()>0){
                     byte[] bytes = FrameOrder.getBytesPanel(rollTimes,channels.get(listSize));
                     myApplication.sendToPort(bytes, "30");
                 }
             }
             else {
                     //发送交易数据给主板
+                   if (rollTimes%20==0) {
+                       if (!myApplication.isSocketConnect())
+                           myApplication.initWebSocketClient();
+                   }
                     byte[] bytes = FrameOrder.getBytesTradeDate(rollTimes);
                     myApplication.sendToPort(bytes, "36");
             }
@@ -126,7 +130,7 @@ public class PollingService extends Service {
             if (action.equals("tenray.outgoods.success"))
             {
                 String data = intent.getStringExtra("tradedata");
-                if (TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
+                if (!TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
                     System.out.println("PollingService:" + data);
                     myApplication.log(data);
                 }
