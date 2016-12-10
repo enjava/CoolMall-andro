@@ -506,8 +506,13 @@ public class MyApplication extends Application {
        }
    }
 
+    public static String getAppkey() {
+        return appkey;
+    }
+
     public boolean isSocketConnect(){
         return webSocketClient.isOpen()&&!webSocketClient.isClosed();
+
     }
 
     public void setOnReceiveMessage(OnReceiveMessage onReceiveMessage) {

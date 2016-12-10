@@ -16,7 +16,7 @@ import it.sauronsoftware.base64.Base64;
  */
 public class SecurityHelper {
     private final static int ITERATIONS = 20;
-
+    //加密
     public static String encrypt(String key, String plainText) throws Exception {
         String encryptTxt = "";
         try {
@@ -42,7 +42,7 @@ public class SecurityHelper {
             throw new Exception("Encrypt Text Error:" + e.getMessage(), e);
         }
     }
-
+    //解密
     public static String decrypt(String key, String encryptTxt)
             throws Exception {
         int saltLength = 12;
