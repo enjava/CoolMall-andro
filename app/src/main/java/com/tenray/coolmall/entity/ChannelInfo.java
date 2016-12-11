@@ -15,6 +15,7 @@ public class ChannelInfo {
     private int stock;//库存
     private int volume;//容量
     private long id;//商品ID
+    private String  productImage;//商品图片
 
     public ChannelInfo(Set<String> sets) {
         if (sets==null)
@@ -23,26 +24,32 @@ public class ChannelInfo {
             if(set.indexOf("price:")!=-1)
                 this.price= parseInt(set.replace("price:",""));
             if(set.indexOf("channelname:")!=-1)
-               name=set.replace("channelname:","");
+                this.name=set.replace("channelname:","");
             if(set.indexOf("stock:")!=-1)
                 this.stock= parseInt(set.replace("stock:",""));
             if(set.indexOf("volume:")!=-1)
                 this.volume= parseInt(set.replace("volume:",""));
             if(set.indexOf("id:")!=-1)
                 this.id=Long.parseLong(set.replace("id:",""));
+            if(set.indexOf("image:")!=-1)
+                this.productImage=set.replace("image:","");
+            if(set.indexOf("productname:")!=-1)
+                this.productName=set.replace("productname:","");
         }
     }
 
     public ChannelInfo() {
+        super();
     }
 
-    public ChannelInfo(String name, int price, String productName, int stock, int volume, long id) {
+    public ChannelInfo(String name, int price, String productName, int stock, int volume, long id, String productImage) {
         this.name = name;
         this.price = price;
         this.productName = productName;
         this.stock = stock;
         this.volume = volume;
         this.id = id;
+        this.productImage = productImage;
     }
 
     public String getName() {
@@ -85,14 +92,20 @@ public class ChannelInfo {
         this.volume = volume;
     }
 
-
-
     public long getId() {
         return id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getProductImage() {
+        return productImage;
+    }
+
+    public void setProductImage(String productImage) {
+        this.productImage = productImage;
     }
 
     @Override
@@ -104,6 +117,7 @@ public class ChannelInfo {
                 ", stock=" + stock +
                 ", volume=" + volume +
                 ", id=" + id +
+                ", productImage='" + productImage + '\'' +
                 '}';
     }
 }

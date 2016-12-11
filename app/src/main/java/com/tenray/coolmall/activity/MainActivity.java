@@ -14,15 +14,24 @@ import android.widget.VideoView;
 
 import com.tenray.coolmall.R;
 import com.tenray.coolmall.animation.ButtonAnimation;
+import com.tenray.coolmall.application.MyApplication;
+import com.tenray.coolmall.util.Constants;
+import com.tenray.coolmall.util.SpUtil;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 ;
 
 public class MainActivity extends Activity implements OnClickListener {
     private ImageView infoOperatingIV;
     private VideoView mVideoView;
-    private int[] mMp4 = new int[] { R.raw.a, R.raw.b, R.raw.c, R.raw.d, R.raw.e, R.raw.f };
-    //private int[] mMp4 = new int[] { };
-    int position = (int) (Math.random() * mMp4.length);
+    private String mAdVideoPath;
+    private int position;
+    private MyApplication mMyApplication;
+    private List<String> listMp4=new ArrayList<>();;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,26 +46,52 @@ public class MainActivity extends Activity implements OnClickListener {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
         setContentView(R.layout.activity_main);
+        initDate();
+        mMyApplication = (MyApplication) this.getApplication();
+        mAdVideoPath= mMyApplication.getVideoAdPath();
         mVideoView = (VideoView) this.findViewById(R.id.mp4);
-        System.out.println("position"+position);
-        String uri = "android.resource://" + getPackageName() + "/" + mMp4[position];
-        mVideoView.setVideoPath(uri);
+        String url=mAdVideoPath+listMp4.get(position);
+        System.out.println("url_position"+url);
+
+        mVideoView.setVideoPath(url);
         mVideoView.start();
         mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                if (position == (mMp4.length-1))
+                if (position == (listMp4.size()-1))
                     position = 0;
                 else
                     position += 1;
-                String uri = "android.resource://" + getPackageName() + "/" + mMp4[position];
-                mVideoView.setVideoPath(uri);
+                String url=mAdVideoPath+listMp4.get(position);
+                mVideoView.setVideoPath(url);
                 mVideoView.start();
             }
         });
         infoOperatingIV = (ImageView) findViewById(R.id.anim_iv);
         anima();
 
+    }
+
+    private void initDate() {
+        Set<String>  mAdVideoSets= SpUtil.getSet(this, Constants.AD_VIDEO_NAME,null);
+
+        if (mAdVideoSets==null){
+            mAdVideoSets = new HashSet<>();
+           String [] sets=new String[]{"a.mp4","b.mp4","c.mp4","d.mp4","e.mp4","f.mp4","g.mp4","h.mp4",
+                   "i.mp4","j.mp4","k.mp4","l.mp4","m.mp4","n.mp4","o.mp4","p.mp4","q.mp4","r.mp4",
+                   "s.mp4","t.mp4","u.mp4","v.mp4","w.mp4","x.mp4","y.mp4","z.mp4","aa.mp4","ab.mp4",
+                   "ac.mp4","ad.mp4","ae.mp4","af.mp4","ag.mp4","ah.mp4","ai.mp4","aj.mp4","ak.mp4","al.mp4"
+           };
+
+            for (int u=0;u<sets.length;u++){
+                mAdVideoSets.add(sets[u]);
+            }
+            SpUtil.putSet(this, Constants.AD_VIDEO_NAME,mAdVideoSets);
+        }
+
+        listMp4.addAll(mAdVideoSets);
+
+        position = (int) (Math.random() * listMp4.size());
     }
 
 

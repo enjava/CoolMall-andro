@@ -48,15 +48,25 @@ import static android.content.ContentValues.TAG;
  */
 
 public class MyApplication extends Application {
-    private  MyWebSocketClient webSocketClient;
+    //WebSocketClient
+    private  MyWebSocketClient mWebSocketClient;
 
-    private  OnReceiveMessage onReceiveMessage;
-    public SerialPortUtil serialport = null;
+    private  OnReceiveMessage mOnReceiveMessage;
+    private SerialPortUtil mSerialport = null;
     private List<String> channels = new ArrayList<>();
     private String returnStr = "";
     private static String backStr = "";
     private LogWriterUtil mLogWriter;
     private String filePath = "";
+    //日志存放路径
+    private String logPath = "";
+    //广告视频存放路径
+    private String videoAdPath = "";
+    //广告视频存放路径
+    private String imageAdPath = "";
+    //商品图片存放路径
+    private String imagePath = "";
+    //日志文件名
     private String fileName = "";
     private boolean first = true;
     private static String orderCode;
@@ -177,8 +187,20 @@ public class MyApplication extends Application {
             SpUtil.putString(this, Constants.COM_PATH, "/dev/ttyS2");
         }
         if (FileUtils.isSdcardExist()) {
-            filePath = Environment.getExternalStorageDirectory() + File.separator + "CoolMall" + File.separator + "log" + File.separator;
-            FileUtils.createDirFile(filePath);
+            filePath = Environment.getExternalStorageDirectory() + File.separator + "CoolMall" + File.separator;
+
+            logPath= filePath+  "log" + File.separator;
+
+            videoAdPath=filePath+  "ad" + File.separator+"video"+ File.separator;
+
+            imageAdPath=filePath+  "ad" + File.separator+"image"+ File.separator;
+
+            imagePath=filePath+"product"+ File.separator+"image"+ File.separator;
+
+            FileUtils.createDirFile(logPath);//记录日志
+            FileUtils.createDirFile(imageAdPath);//广告图片
+            FileUtils.createDirFile(videoAdPath);//广告视频
+            FileUtils.createDirFile(imagePath);//商品图片
             fileName = CommonUtil.formatDate("yyyy-MM-dd") + ".Log";
             initLogWriterUtil();
         }
@@ -232,8 +254,8 @@ public class MyApplication extends Application {
     public void initWebSocketClient()
     {
         if (!TextUtils.isEmpty(appkey)) {
-            webSocketClient = MyWebSocketClient.initClient(appkey);
-            webSocketClient.setOnReceiveWebSocketMessage(new MyOnReceiveWebSocketMessage());
+            mWebSocketClient = MyWebSocketClient.initClient(appkey);
+            mWebSocketClient.setOnReceiveWebSocketMessage(new MyOnReceiveWebSocketMessage());
             System.out.println("appkey=" + appkey);
             log("初始化MyWebSocketClient");
 
@@ -242,7 +264,7 @@ public class MyApplication extends Application {
 
     //初始化 log
     public void initLogWriterUtil() {
-        File logf = new File(filePath + fileName);
+        File logf = new File(logPath + fileName);
         try {
             mLogWriter = LogWriterUtil.open(logf.getAbsolutePath(), true);
             log("---------程序开始执行-------");
@@ -257,23 +279,23 @@ public class MyApplication extends Application {
         Log.d(TAG, "onTerminate");
         super.onTerminate();
         //关闭串口
-        if (serialport != null)
-            serialport.closeSerialPort();
+        if (mSerialport != null)
+            mSerialport.closeSerialPort();
         PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
     }
 
     //初始化串口
     public void initSerialport(String comName) {
         Log.d(TAG, "initSerialport");
-        serialport = SerialPortUtil.getInstance(comName);
-        serialport.setOnDataReceiveListener(new MyOnDataReceiveListener());
+        mSerialport = SerialPortUtil.getInstance(comName);
+        mSerialport.setOnDataReceiveListener(new MyOnDataReceiveListener());
     }
 
     public void synTime() {
-        if (serialport == null) {
+        if (mSerialport == null) {
             initSerialport(comPath);
         }
-        if (serialport.getmSerialPort() == null) {
+        if (mSerialport.getmSerialPort() == null) {
             initSerialport(comPath);
             ToastUtil.show(this, "串口打开失败，请检查串口设置是否正确");
             return;
@@ -285,7 +307,7 @@ public class MyApplication extends Application {
             itimes = 0;
         SpUtil.putInt(this, Constants.FRAME_NUMBER, ++itimes);
         try {
-            serialport.sendToPort(abc);
+            mSerialport.sendToPort(abc);
         } catch (Exception e) {
             ToastUtil.show(this, "更改时间失败");
         }
@@ -301,9 +323,9 @@ public class MyApplication extends Application {
         orderCode = "";
         boolean result = false;
         try {
-            if (serialport.getmSerialPort() != null) {
+            if (mSerialport.getmSerialPort() != null) {
                 backStr="";
-                serialport.sendToPort(bytes);
+                mSerialport.sendToPort(bytes);
                 for (int i=0;i<40;i++) {
                     if (orderCode.equals(order))
                         return true;
@@ -477,7 +499,7 @@ public class MyApplication extends Application {
 
 
     public void  sendMsg(String msg) {
-        webSocketClient.sendMsg(msg);
+        mWebSocketClient.sendMsg(msg);
     }
 
    class MyOnReceiveWebSocketMessage implements OnReceiveWebSocketMessage{
@@ -493,13 +515,13 @@ public class MyApplication extends Application {
                String  channel=args[3];
                String payType=args[4];
                byte[] bytes=FrameOrder.getBytesOutGoods(spFrameNumber(),channel,totalMoney,Integer.parseInt(payType));
-               if (onReceiveMessage!=null)
-                   onReceiveMessage.receive("outGoods");
+               if (mOnReceiveMessage!=null)
+                   mOnReceiveMessage.receive("outGoods");
                sendToPort(bytes,"34");
            }else {
-               if (onReceiveMessage!=null) {
+               if (mOnReceiveMessage!=null) {
                    System.out.println("MyOnReceiveWebSocketMessage2:"+message);
-                   onReceiveMessage.receive(message);
+                   mOnReceiveMessage.receive(message);
                }
                else {
                    System.out.println("MyOnReceiveWebSocketMessage3:"+message);
@@ -512,12 +534,28 @@ public class MyApplication extends Application {
         return appkey;
     }
 
+    public SerialPortUtil getmSerialport() {
+        return mSerialport;
+    }
+
+    public String getVideoAdPath() {
+        return videoAdPath;
+    }
+
+    public String getImageAdPath() {
+        return imageAdPath;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public boolean isSocketConnect(){
-        return webSocketClient.isOpen()&&!webSocketClient.isClosed();
+        return mWebSocketClient.isOpen()&&!mWebSocketClient.isClosed();
 
     }
 
     public void setOnReceiveMessage(OnReceiveMessage onReceiveMessage) {
-        this.onReceiveMessage = onReceiveMessage;
+        this.mOnReceiveMessage = onReceiveMessage;
     }
 }

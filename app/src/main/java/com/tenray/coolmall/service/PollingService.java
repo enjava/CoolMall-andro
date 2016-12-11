@@ -83,8 +83,8 @@ public class PollingService extends Service {
     private void sendRollCommand() {
         if (serialPort==null)
         {
-            if (myApplication.serialport!=null)
-                serialPort=myApplication.serialport.getmSerialPort();
+            if (myApplication.getmSerialport()!=null)
+                serialPort=myApplication.getmSerialport().getmSerialPort();
             return;
         }
         rollTimes++;

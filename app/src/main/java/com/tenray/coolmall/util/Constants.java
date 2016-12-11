@@ -18,7 +18,12 @@ public class Constants {
 	/**
 	 * 货道
 	 */
-	public static final String MACHINE_ID = "MACHINE_ID";
+	public static final String MACHINE_ID = "machine_id";
+
+	/**
+	 * 广告视频列表
+	 */
+	public static final String AD_VIDEO_NAME ="ad_video_name" ;
 //
 //	/**
 //	 * 是否设置密码key
