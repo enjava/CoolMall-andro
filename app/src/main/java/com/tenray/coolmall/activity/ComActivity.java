@@ -255,7 +255,6 @@ public class ComActivity extends Activity {
                 Message msg=Message.obtain();
                 msg.what=110;
                 mHandler.sendMessageDelayed(msg,2000);
-                //ToastUtil.show(ComActivity.this,"出货成功");
             }
         }
     }

@@ -235,6 +235,8 @@ public class MyApplication extends Application {
             webSocketClient = MyWebSocketClient.initClient(appkey);
             webSocketClient.setOnReceiveWebSocketMessage(new MyOnReceiveWebSocketMessage());
             System.out.println("appkey=" + appkey);
+            log("初始化MyWebSocketClient");
+
         }
     }
 

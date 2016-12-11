@@ -32,6 +32,7 @@ public class PollingService extends Service {
     private PollReceiver pollReceiver;  //广播实例
     @Override
     public IBinder onBind(Intent intent) {
+        myApplication.log("PollingService-onBind");
         return null;
     }
 
@@ -40,7 +41,7 @@ public class PollingService extends Service {
 
         super.onCreate();
         myApplication = (MyApplication) getApplication();
-
+        myApplication.log("PollingService-onCreate");
         // 注册广播接收
         pollReceiver = new PollReceiver();
         IntentFilter filter = new IntentFilter();
@@ -50,7 +51,8 @@ public class PollingService extends Service {
     @Override
     public boolean onUnbind(Intent intent)
     {
-         unregisterReceiver(pollReceiver);
+       unregisterReceiver(pollReceiver);
+        myApplication.log("PollingService-onUnbind");
         System.out.println("Service:onUnbind");
         return super.onUnbind(intent);
     }
@@ -58,9 +60,21 @@ public class PollingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         new PollingThread().start();
+        //myApplication.log("PollingService-onStartCommand");
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @Override
+    public void onDestroy() {
+        myApplication.log("PollingService-onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean stopService(Intent name) {
+        myApplication.log("PollingService-stopService");
+        return super.stopService(name);
+    }
 
     //初始化通知栏配置
     private void initNotifiManager() {
