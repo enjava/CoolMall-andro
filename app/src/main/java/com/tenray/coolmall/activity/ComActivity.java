@@ -21,8 +21,6 @@ import com.tenray.coolmall.R;
 import com.tenray.coolmall.application.MyApplication;
 import com.tenray.coolmall.entity.ChannelInfo;
 import com.tenray.coolmall.serialport.FrameOrder;
-import com.tenray.coolmall.service.PollingService;
-import com.tenray.coolmall.util.PollingUtils;
 import com.tenray.coolmall.util.SpUtil;
 import com.tenray.coolmall.util.ToastUtil;
 
@@ -146,7 +144,7 @@ public class ComActivity extends Activity {
     protected void onDestroy() {
         myApplication.log("关闭串口");
         //关闭串口
-       PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
+      // PollingUtils.stopPollingService(this, PollingService.class, PollingService.ACTION);
         unregisterReceiver(receiveBroadCast);
         super.onDestroy();
     }
