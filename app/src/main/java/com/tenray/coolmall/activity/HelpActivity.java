@@ -58,6 +58,9 @@ public class HelpActivity extends Activity {
         finish();
     }
 
+    public void bangzhu(View view) {
+    }
+
     class TimeCount extends CountDownTimer {
 
         public TimeCount(long millisInFuture, long countDownInterval) {

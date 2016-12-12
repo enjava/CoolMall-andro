@@ -68,6 +68,7 @@
         android:id="@+id/imageView5"
         android:scaleType="centerInside"
         android:layout_alignParentBottom="true"
+        android:onClick="goumai"
         android:layout_marginLeft="320dp"
         android:layout_marginBottom="50dp"
         />

@@ -117,6 +117,9 @@ public class GoodsActivity extends Activity {
         finish();
     }
 
+    public void goumai(View view) {
+    }
+
     class Madapter extends BaseAdapter {
 
         @Override

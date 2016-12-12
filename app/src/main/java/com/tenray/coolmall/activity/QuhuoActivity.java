@@ -202,12 +202,15 @@ public class QuhuoActivity extends Activity {
         startActivity(new Intent(this, HelpActivity.class));
         finish();
     }
+    public void quhuo(View view) {
+    }
 
     public void onReback(View view) {
         time.cancel();
         startActivity(new Intent(this, GoodsActivity.class));
         finish();
     }
+
 
     class TimeCount extends CountDownTimer {
         public TimeCount(long millisInFuture, long countDownInterval) {
