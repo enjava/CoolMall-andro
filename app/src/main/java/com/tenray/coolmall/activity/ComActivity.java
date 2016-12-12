@@ -27,8 +27,8 @@ import com.tenray.coolmall.util.ToastUtil;
 import java.util.Set;
 
 public class ComActivity extends Activity {
-    private static final String TAG = ComActivity.class.getSimpleName();
-
+    //private static final String TAG = ComActivity.class.getSimpleName();
+    private final String tag= getClass().getSimpleName();
     private MyApplication myApplication;
     private Button mbtnEd;
     private  TextView mTv;
@@ -118,7 +118,7 @@ public class ComActivity extends Activity {
                     mbtnEd.setText("");
                     break;
                 default:
-                    Log.i(TAG, "测试");
+                    Log.i(tag, "测试");
                     break;
             }
         }
@@ -165,7 +165,7 @@ public class ComActivity extends Activity {
                 mHandler.sendMessage(msg);
             }
             myApplication.log("出货调用后");
-            System.out.println(fra);
+            Log.i(tag,fra);
         }
         else {
             ToastUtil.showTop(this,"货道选择错误",0,150);
@@ -235,7 +235,7 @@ public class ComActivity extends Activity {
                 msg.what=101;
                 break;
             default:
-                Log.i(TAG, "测试onClick");
+                Log.i(tag, "测试onClick");
                 break;
         }
         mHandler.sendMessage(msg);
@@ -250,7 +250,7 @@ public class ComActivity extends Activity {
             if (action.equals("tenray.outgoods.success"))
             {
                 String data = intent.getStringExtra("tradedata");
-                System.out.println(TAG+data);
+                Log.i(tag,"tag1"+data);
                 mTv.setText("出货成功");
                 Message msg=Message.obtain();
                 msg.what=110;

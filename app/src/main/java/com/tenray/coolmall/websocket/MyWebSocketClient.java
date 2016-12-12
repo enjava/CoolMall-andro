@@ -1,5 +1,7 @@
 package com.tenray.coolmall.websocket;
 
+import android.util.Log;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
@@ -12,6 +14,7 @@ import java.net.URI;
  */
 
 public class MyWebSocketClient extends WebSocketClient {
+    private static final String tag= MyWebSocketClient.class.getSimpleName();
     public static MyWebSocketClient myWebSocketClient;
     public OnReceiveWebSocketMessage onReceiveWebSocketMessage;
     private String appKey;
@@ -22,8 +25,7 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        //System.out.println(handshakedata.toString() + "  handshakedata.getHttpStatusMessage()" + handshakedata.getHttpStatusMessage());
-        System.out.println("打开链接onOpen");
+        Log.i(tag,"打开链接onOpen");
         sendMsg("onOpenAppKey=" + appKey);
 
     }
@@ -32,17 +34,17 @@ public class MyWebSocketClient extends WebSocketClient {
     public void onMessage(String message) {
         if (onReceiveWebSocketMessage != null)
             onReceiveWebSocketMessage.receive(message);
-        System.out.println("接受到的消息" + message);
+        Log.i(tag,"接受到的消息" + message);
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("Connection closed by " + (remote ? "remote peer" : "us")+"code:"+code);
+        Log.i(tag,"Connection closed by " + (remote ? "remote peer" : "us")+"code:"+code);
     }
 
     @Override
     public void onError(Exception ex) {
-        System.out.println("EEEEEEEEEEEEEEE:"+ex.getMessage());
+        Log.i(tag,"EEEEEEEEEEEEEEE:"+ex.getMessage());
         ex.printStackTrace();
     }
      public static boolean isOpen(){
@@ -62,7 +64,7 @@ public class MyWebSocketClient extends WebSocketClient {
             myWebSocketClient = new MyWebSocketClient(new URI("ws://120.24.172.102:8000/websocket"), new Draft_17(), appKey);
             myWebSocketClient.connect();
         } catch (Exception e) {
-            System.out.println("ws://120.24.172.102:8000/websocket" + e.getMessage());
+            Log.i(tag,"ws://120.24.172.102:8000/websocket" + e.getMessage());
         }
         return myWebSocketClient;
 
@@ -72,7 +74,7 @@ public class MyWebSocketClient extends WebSocketClient {
         if (myWebSocketClient != null && isOpen())
             myWebSocketClient.send(msg);
         else
-            System.out.println("myWebSocketClient=null");
+            Log.i(tag,"myWebSocketClient=null");
     }
 
     //断开连接

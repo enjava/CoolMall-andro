@@ -19,6 +19,7 @@ import com.tenray.coolmall.util.ToastUtil;
  */
 
 public class QuhuoActivity extends Activity {
+    private final String tag= getClass().getSimpleName();
     private String input="";
     private Button mBtnEd;
     private Button mReback;

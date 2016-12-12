@@ -15,6 +15,7 @@ import com.tenray.coolmall.util.CountDownTimer;
  */
 
 public class HelpActivity extends Activity {
+    private final String tag= getClass().getSimpleName();
     private TimeCount time;
     private Button mReback;
 

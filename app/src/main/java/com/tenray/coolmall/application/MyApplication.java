@@ -48,7 +48,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class MyApplication extends Application {
-    //WebSocketClient
+    private final String tag= getClass().getSimpleName();
     private  MyWebSocketClient mWebSocketClient;
 
     private  OnReceiveMessage mOnReceiveMessage;
@@ -111,7 +111,7 @@ public class MyApplication extends Application {
                 case SYN_DATA_PANEL:
                     break;
                 case CONTROL_OUT_GOODS:
-                    System.out.println("CONTROL_OUT_GOODS" + returnStr);
+                    Log.i(tag,"CONTROL_OUT_GOODS"+returnStr);
                     break;
                 case TRADE_DATA_PANEL:
                     //轮询36命令
@@ -130,8 +130,8 @@ public class MyApplication extends Application {
                     synTime();
                     break;
                 default:
-                    System.out.println("returnStr" + returnStr);
-                    Log.i(TAG, "测试" + msg.what);
+                    Log.i(tag,"returnStr"+returnStr);
+                    Log.i(tag, "测试" + msg.what);
                     break;
             }
         }
@@ -141,7 +141,7 @@ public class MyApplication extends Application {
     private void analysisTradeData() {
         String str = returnStr;
         if (i36%33==0)
-            System.out.println(str+"i36:"+i36);
+            Log.i(tag,str+"i36:"+i36);
         i36++;
         String[] args = str.split(" ");
         if (args.length<24)
@@ -156,7 +156,7 @@ public class MyApplication extends Application {
         int number = FrameUtil.hiInt4String(num);
         int mPrice = FrameUtil.hiInt4String(price);
         int payType = FrameUtil.hiInt4String(payTypes);
-       // System.out.println(str);
+
         if (number != mSerialNumber ) {
             mSerialNumber = number;
             if (first)
@@ -169,9 +169,11 @@ public class MyApplication extends Application {
             intent.setAction("tenray.outgoods.success");
             String tradedata = "价格:[" + mPrice + "] 流程号:[" + number + "] 货道:[" + channel + "] 支付方式:[" + payType + "]";
             intent.putExtra("tradedata", tradedata);
-            System.out.println("普通广播发送前");
+            Log.i(tag,"普通广播发送前");
+
             this.sendBroadcast(intent);   //普通广播发送
-            System.out.println("普通广播发送后");
+
+            Log.i(tag,"普通广播发送后");
             log("tradedata"+tradedata);
         }
         //log(str);
@@ -256,7 +258,7 @@ public class MyApplication extends Application {
         if (!TextUtils.isEmpty(appkey)) {
             mWebSocketClient = MyWebSocketClient.initClient(appkey);
             mWebSocketClient.setOnReceiveWebSocketMessage(new MyOnReceiveWebSocketMessage());
-            System.out.println("appkey=" + appkey);
+            Log.i(tag,"appkey=" + appkey);
             log("初始化MyWebSocketClient");
 
         }
@@ -339,7 +341,7 @@ public class MyApplication extends Application {
 
     public void setChannelData() {
         String[] args = returnStr.split(" ");
-        System.out.println(returnStr);
+        Log.i(tag,returnStr);
         if (args[5].equals("30")) {
             String chanelName = args[8];
             String[] prices = new String[]{args[20], args[21], args[22], args[23]};
@@ -506,7 +508,7 @@ public class MyApplication extends Application {
 
        @Override
        public void receive(String message) {
-           System.out.println("MyOnReceiveWebSocketMessage1:"+message);
+           Log.i(tag,"MyOnReceiveWebSocketMessage1:"+message);
            if (message.indexOf("trade_status=TRADE_SUCCESS&")==0){
                //支付成功
                String msg=message.replace("trade_status=TRADE_SUCCESS&","");
@@ -520,11 +522,11 @@ public class MyApplication extends Application {
                sendToPort(bytes,"34");
            }else {
                if (mOnReceiveMessage!=null) {
-                   System.out.println("MyOnReceiveWebSocketMessage2:"+message);
+                   Log.i(tag,"MyOnReceiveWebSocketMessage2:"+message);
                    mOnReceiveMessage.receive(message);
                }
                else {
-                   System.out.println("MyOnReceiveWebSocketMessage3:"+message);
+                   Log.i(tag,"MyOnReceiveWebSocketMessage3:"+message);
                }
            }
        }

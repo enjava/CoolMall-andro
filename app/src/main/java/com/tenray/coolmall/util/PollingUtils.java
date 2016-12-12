@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * Created by en on 2016/11/26.
@@ -12,6 +13,7 @@ import android.os.SystemClock;
  */
 
 public class PollingUtils {
+    private static final  String tag= PollingUtils.class.getSimpleName();
     //开启轮询服务
     public static void startPollingService(Context context, int millisecond, Class<?> cls, String action) {
         //获取AlarmManager系统服务
@@ -30,7 +32,7 @@ public class PollingUtils {
         //使用AlarmManger的setRepeating方法设置定期执行的时间间隔（seconds秒）和需要执行的Service
         manager.setRepeating(AlarmManager.ELAPSED_REALTIME, triggerAtTime,
                 millisecond, pendingIntent);
-        System.out.println(cls.getSimpleName()+"开启轮询服务起始时间"+CommonUtil.formatDate("MM-dd HH:mm:ss:SSS"));
+        Log.i(tag,cls.getSimpleName()+"开启轮询服务起始时间"+CommonUtil.formatDate("MM-dd HH:mm:ss:SSS"));
     }
     //停止轮询服务
     public static void stopPollingService(Context context, Class<?> cls,String action) {
@@ -42,6 +44,6 @@ public class PollingUtils {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //取消正在执行的服务
         manager.cancel(pendingIntent);
-        System.out.println(cls.getSimpleName()+"停止轮询服务时间"+CommonUtil.formatDate("MM-dd HH:mm:ss:SSS"));
+        Log.i(tag,cls.getSimpleName()+"停止轮询服务时间"+CommonUtil.formatDate("MM-dd HH:mm:ss:SSS"));
     }
 }

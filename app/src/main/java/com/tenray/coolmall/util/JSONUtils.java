@@ -79,7 +79,7 @@ public class JSONUtils {
             public void run() {
                 advertiseList= JSONUtils.jsonList();
                 for (Advertise advertise:advertiseList) {
-                    System.out.println(advertise.toString());
+                    //System.out.println(advertise.toString());
                 }
             }
         }.start();
@@ -93,7 +93,7 @@ public class JSONUtils {
                 advertiseList= JSONUtils.jsonList();
                 updateAdvertise=true;
                 for (Advertise advertise:advertiseList) {
-                    System.out.println(advertise.toString());
+                   // System.out.println(advertise.toString());
                 }
             }
         }.start();

@@ -298,7 +298,6 @@ public static  int getMinute(Date oldDate){
 	long timeOne=dateOne.getTimeInMillis();
 	long timeTwo=dateTwo.getTimeInMillis();
 	int  minute=(int)((timeOne-timeTwo)/(1000*60));//转化minute
-	//System.out.println("相隔"+minute+"分钟");
 	return minute;
 }
 }

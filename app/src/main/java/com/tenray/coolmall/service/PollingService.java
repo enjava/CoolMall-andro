@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.tenray.coolmall.application.MyApplication;
 import com.tenray.coolmall.serialport.FrameOrder;
@@ -23,8 +24,9 @@ import android_serialport_api.SerialPort;
  */
 
 public class PollingService extends Service {
+    private final String tag= getClass().getSimpleName();
     public static final String ACTION = "com.tenray.coolmall.service.PollingService";
-   private List<String> channels;
+    private List<String> channels;
     private int listSize=-1;
     private static int rollTimes = FrameUtil.nextInt();
     private MyApplication myApplication;
@@ -53,7 +55,7 @@ public class PollingService extends Service {
     {
        unregisterReceiver(pollReceiver);
         myApplication.log("PollingService-onUnbind");
-        System.out.println("Service:onUnbind");
+        Log.i(tag,"Service:onUnbind");
         return super.onUnbind(intent);
     }
 
@@ -109,7 +111,7 @@ public class PollingService extends Service {
                     myApplication.sendToPort(bytes, "36");
             }
         } catch (Exception e) {
-            System.out.println("aaaaaaaaaaaaaaaaaaa");
+            Log.i(tag,"aaaaaaaaaaaaaaaaaaa");
         }
     }
 
@@ -129,7 +131,7 @@ public class PollingService extends Service {
             count++;
             //当除计数能被5整时弹出通知
             if (count % 50 == 0) {
-                System.out.println("New message!" + count);
+                Log.i(tag,"New message!" + count);
             }
         }
     }
@@ -145,7 +147,7 @@ public class PollingService extends Service {
             {
                 String data = intent.getStringExtra("tradedata");
                 if (!TextUtils.isEmpty(data)&&data.indexOf("流程号")!=-1) {
-                    System.out.println("PollingService:" + data);
+                    Log.i(tag,"PollingService:" + data);
                     myApplication.log(data);
                 }
             }

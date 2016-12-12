@@ -34,6 +34,7 @@ import static com.tenray.coolmall.R.id.productName;
  */
 
 public class BuyActivity extends Activity {
+    private final String tag= getClass().getSimpleName();
     private ImageView mZhifu5;
     private ImageView mZhifu2;
     private ImageView mQRCode;

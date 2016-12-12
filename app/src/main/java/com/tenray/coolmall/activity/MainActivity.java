@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -26,12 +27,15 @@ import java.util.Set;
 ;
 
 public class MainActivity extends Activity implements OnClickListener {
+    private final String tag=getClass().getSimpleName();
     private ImageView infoOperatingIV;
     private VideoView mVideoView;
     private String mAdVideoPath;
     private int position;
     private MyApplication mMyApplication;
     private List<String> listMp4=new ArrayList<>();;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +55,10 @@ public class MainActivity extends Activity implements OnClickListener {
         mAdVideoPath= mMyApplication.getVideoAdPath();
         mVideoView = (VideoView) this.findViewById(R.id.mp4);
         String url=mAdVideoPath+listMp4.get(position);
-        System.out.println("url_position:"+url);
-        System.out.println("listMp4lenth:"+listMp4.size());
+
+        Log.i(tag,"url_position:"+url);
+        Log.i(tag,"url_position:"+"listMp4lenth:"+listMp4.size());
+
         mVideoView.setVideoPath(url);
         mVideoView.start();
         mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {

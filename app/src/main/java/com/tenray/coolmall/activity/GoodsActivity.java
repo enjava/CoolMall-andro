@@ -25,6 +25,7 @@ import java.util.Map;
  */
 
 public class GoodsActivity extends Activity {
+    private final String tag= getClass().getSimpleName();
     private TimeCount time;
     private Button mReback;
     private GridView gv_home;
