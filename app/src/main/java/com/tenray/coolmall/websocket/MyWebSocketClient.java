@@ -22,13 +22,9 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
-        System.out.println(handshakedata.toString() + "  handshakedata.getHttpStatusMessage()" + handshakedata.getHttpStatusMessage());
-        System.out.println("打开链接");
-        try {
-            sendMsg("onOpenAppKey=" + appKey);
-        } catch (Exception e) {
-
-        }
+        //System.out.println(handshakedata.toString() + "  handshakedata.getHttpStatusMessage()" + handshakedata.getHttpStatusMessage());
+        System.out.println("打开链接onOpen");
+        sendMsg("onOpenAppKey=" + appKey);
 
     }
 

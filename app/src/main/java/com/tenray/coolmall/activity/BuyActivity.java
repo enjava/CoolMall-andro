@@ -336,8 +336,7 @@ public class BuyActivity extends Activity {
                     Message msg = Message.obtain();
                     msg.what = 11;
                     mHandler.sendMessage(msg);
-
-                    System.out.println("PollingService:" + data);
+                    //System.out.println("PollingService:" + data);
                     Message msg2 = Message.obtain();
                     msg2.what = 12;
                     mHandler.sendMessageDelayed(msg2, 5000);

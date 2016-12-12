@@ -51,8 +51,8 @@ public class MainActivity extends Activity implements OnClickListener {
         mAdVideoPath= mMyApplication.getVideoAdPath();
         mVideoView = (VideoView) this.findViewById(R.id.mp4);
         String url=mAdVideoPath+listMp4.get(position);
-        System.out.println("url_position"+url);
-
+        System.out.println("url_position:"+url);
+        System.out.println("listMp4lenth:"+listMp4.size());
         mVideoView.setVideoPath(url);
         mVideoView.start();
         mVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
