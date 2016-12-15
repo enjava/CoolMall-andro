@@ -39,7 +39,7 @@ public class MyWebSocketClient extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        Log.i(tag,"Connection closed by " + (remote ? "remote peer" : "us")+"code:"+code);
+        Log.i(tag,"Connection closed by " + (remote ? "remote peer " : "us")+"code:"+code);
     }
 
     @Override

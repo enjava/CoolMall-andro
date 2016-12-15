@@ -34,8 +34,6 @@ public class MainActivity extends Activity implements OnClickListener {
     private int position;
     private MyApplication mMyApplication;
     private List<String> listMp4=new ArrayList<>();;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

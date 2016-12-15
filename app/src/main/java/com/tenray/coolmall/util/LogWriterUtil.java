@@ -1,10 +1,8 @@
 package com.tenray.coolmall.util;
 
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -16,7 +14,7 @@ import java.util.Date;
  */
 public class LogWriterUtil {
     //+ "log" + File.separator
-   private static  String path= Environment.getExternalStorageDirectory()+ File.separator +"CoolMall"+ File.separator ;
+   //private static  String path= Environment.getExternalStorageDirectory()+ File.separator +"CoolMall"+ File.separator ;
 
     private static LogWriterUtil mLogWriter;
 
@@ -32,10 +30,9 @@ public class LogWriterUtil {
     }
 
     public static LogWriterUtil open(String file_path,boolean append) throws IOException {
-        if (mLogWriter == null) {
-            mLogWriter = new LogWriterUtil(file_path);
-        }
-        File mFile = new File(mPath);
+        mLogWriter = new LogWriterUtil(file_path);
+
+       // File mFile = new File(mPath);
         try {
             mWriter = new BufferedWriter(new FileWriter(mPath,append), 2048);
         }catch (Exception e)
@@ -43,7 +40,8 @@ public class LogWriterUtil {
             String str =e.getMessage();
             Log.d("",str);
         }
-        df = new SimpleDateFormat("[ddHHmmss:SSS]:");
+        df = new SimpleDateFormat("[dd HH:mm:ss:SSS]:");
+
 
         return mLogWriter;
     }

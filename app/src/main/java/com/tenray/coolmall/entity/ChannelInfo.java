@@ -2,8 +2,6 @@ package com.tenray.coolmall.entity;
 
 import java.util.Set;
 
-import static java.lang.Integer.parseInt;
-
 /**
  * Created by en on 2016/12/1.
  */
@@ -22,13 +20,13 @@ public class ChannelInfo {
             return;
         for (String set:sets){
             if(set.indexOf("price:")!=-1)
-                this.price= parseInt(set.replace("price:",""));
+                this.price= Integer.parseInt(set.replace("price:",""));
             if(set.indexOf("channelname:")!=-1)
                 this.name=set.replace("channelname:","");
             if(set.indexOf("stock:")!=-1)
-                this.stock= parseInt(set.replace("stock:",""));
+                this.stock= Integer.parseInt(set.replace("stock:",""));
             if(set.indexOf("volume:")!=-1)
-                this.volume= parseInt(set.replace("volume:",""));
+                this.volume= Integer.parseInt(set.replace("volume:",""));
             if(set.indexOf("id:")!=-1)
                 this.id=Long.parseLong(set.replace("id:",""));
             if(set.indexOf("image:")!=-1)

@@ -58,6 +58,7 @@ public class MyApplication extends Application {
     private static String backStr = "";
     private LogWriterUtil mLogWriter;
     private String filePath = "";
+    private Date clientTime;
     //日志存放路径
     private String logPath = "";
     //广告视频存放路径
@@ -183,6 +184,7 @@ public class MyApplication extends Application {
         // 程序创建的时候执行
         Log.d(TAG, "onCreate");
         super.onCreate();
+        clientTime=new Date();
         comPath = SpUtil.getString(this, Constants.COM_PATH, "");
         if (TextUtils.isEmpty(comPath)) {
             comPath = "/dev/ttyS2";
@@ -269,7 +271,7 @@ public class MyApplication extends Application {
         File logf = new File(logPath + fileName);
         try {
             mLogWriter = LogWriterUtil.open(logf.getAbsolutePath(), true);
-            log("---------程序开始执行-------");
+            log("---------程序开始执行-------"+logf.getAbsolutePath());
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         }
@@ -501,6 +503,7 @@ public class MyApplication extends Application {
 
 
     public void  sendMsg(String msg) {
+        clientTime=new Date();
         mWebSocketClient.sendMsg(msg);
     }
 
@@ -555,6 +558,10 @@ public class MyApplication extends Application {
     public boolean isSocketConnect(){
         return mWebSocketClient.isOpen()&&!mWebSocketClient.isClosed();
 
+    }
+
+    public Date getClientTime() {
+        return clientTime;
     }
 
     public void setOnReceiveMessage(OnReceiveMessage onReceiveMessage) {

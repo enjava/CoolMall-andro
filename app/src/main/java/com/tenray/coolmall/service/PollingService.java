@@ -12,6 +12,7 @@ import android.util.Log;
 import com.tenray.coolmall.application.MyApplication;
 import com.tenray.coolmall.serialport.FrameOrder;
 import com.tenray.coolmall.serialport.FrameUtil;
+import com.tenray.coolmall.util.CommonUtil;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class PollingService extends Service {
     private MyApplication myApplication;
     private  SerialPort serialPort=null;
     private PollReceiver pollReceiver;  //广播实例
+   // private static Date clientTime;
     @Override
     public IBinder onBind(Intent intent) {
         myApplication.log("PollingService-onBind");
@@ -93,7 +95,7 @@ public class PollingService extends Service {
         if (rollTimes > 65500)
             rollTimes = 0;
         try {
-            if (listSize==-1||channels.size()>(listSize+1)){
+            if (listSize==-1||channels.size()>(listSize)){
                 channels=  myApplication.getChannels();
                 listSize++;
                 if (channels!=null&&channels.size()>0){
@@ -103,9 +105,13 @@ public class PollingService extends Service {
             }
             else {
                     //发送交易数据给主板
-                   if (rollTimes%20==0) {
+                   if (rollTimes%50==0) {
+                       if (CommonUtil.getMinute(myApplication.getClientTime())>10){
+                           myApplication.sendMsg("test");
+                       }
                        if (!myApplication.isSocketConnect())
                            myApplication.initWebSocketClient();
+
                    }
                     byte[] bytes = FrameOrder.getBytesTradeDate(rollTimes);
                     myApplication.sendToPort(bytes, "36");
