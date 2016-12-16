@@ -23,9 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-;
-
+//主页面
 public class MainActivity extends Activity implements OnClickListener {
     private final String tag=getClass().getSimpleName();
     private ImageView infoOperatingIV;
@@ -34,6 +32,8 @@ public class MainActivity extends Activity implements OnClickListener {
     private int position;
     private MyApplication mMyApplication;
     private List<String> listMp4=new ArrayList<>();;
+
+    ///mnt/usbhost0/8_4/mm.mp4
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +53,7 @@ public class MainActivity extends Activity implements OnClickListener {
         mAdVideoPath= mMyApplication.getVideoAdPath();
         mVideoView = (VideoView) this.findViewById(R.id.mp4);
         String url=mAdVideoPath+listMp4.get(position);
+        //String url="/mnt/usbhost0/8_4/mm.mp4";
 
         Log.i(tag,"url_position:"+url);
         Log.i(tag,"url_position:"+"listMp4lenth:"+listMp4.size());

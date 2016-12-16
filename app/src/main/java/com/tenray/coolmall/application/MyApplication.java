@@ -207,6 +207,16 @@ public class MyApplication extends Application {
             FileUtils.createDirFile(imagePath);//商品图片
             fileName = CommonUtil.formatDate("yyyy-MM-dd") + ".Log";
             initLogWriterUtil();
+
+          List<String> lsit= FileUtils. getExtSDCardPath();
+
+            //region Description 获取外置SD卡
+
+            for (String string:lsit){
+                Log.i(tag,"获取外置SD卡:"+string);
+            }
+
+            // endregion
         }
         //同步时间
         Message msg = Message.obtain();
