@@ -16,8 +16,6 @@ import android.widget.VideoView;
 import com.tenray.coolmall.R;
 import com.tenray.coolmall.animation.ButtonAnimation;
 import com.tenray.coolmall.application.MyApplication;
-import com.tenray.coolmall.util.Constants;
-import com.tenray.coolmall.util.SpUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -78,21 +76,21 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     private void initDate() {
-        Set<String>  mAdVideoSets= SpUtil.getSet(this, Constants.AD_VIDEO_NAME,null);
+      //  Set<String>  mAdVideoSets//= SpUtil.getSet(this, Constants.AD_VIDEO_NAME,null);
 
-        if (mAdVideoSets==null){
-            mAdVideoSets = new HashSet<>();
-           String [] sets=new String[]{"a.mp4","b.mp4","c.mp4","d.mp4","e.mp4","f.mp4","g.mp4","h.mp4",
-                   "i.mp4","j.mp4","k.mp4","l.mp4","m.mp4","n.mp4","o.mp4","p.mp4","q.mp4","r.mp4",
-                   "s.mp4","t.mp4","u.mp4","v.mp4","w.mp4","x.mp4","y.mp4","z.mp4","aa.mp4","ab.mp4",
-                   "ac.mp4","ad.mp4","ae.mp4","af.mp4","ag.mp4","ah.mp4","ai.mp4","aj.mp4","ak.mp4","al.mp4"
+       // if (mAdVideoSets==null){
+        Set<String>   mAdVideoSets = new HashSet<>();
+           String [] sets=new String[]{"ba.mp4","bb.mp4","bc.mp4","bd.mp4","be.mp4","bf.mp4","bg.mp4","bh.mp4","bi.mp4","bj.mp4", "bk.mp4","bl.mp4","bm.mp4"
+                   ,"bn.mp4","bo.mp4","bp.mp4","bq.mp4","br.mp4","bs.mp4","bt.mp4","bu.mp4","bv.mp4","bw.mp4","bx.mp4","by.mp4","bz.mp4"
+                   ,"ca.mp4","cb.mp4","cc.mp4","cd.mp4","ce.mp4","cf.mp4","cg.mp4","ch.mp4","ci.mp4","cj.mp4","ck.mp4","cl.mp4","cm.mp4"
+                   ,"cn.mp4","co.mp4","cp.mp4","cq.mp4","cr.mp4","cs.mp4","ct.mp4","cu.mp4","cv.mp4","cw.mp4"
            };
 
             for (int u=0;u<sets.length;u++){
-                mAdVideoSets.add(sets[u]);
+                mAdVideoSets.add("2/"+sets[u]);
             }
-            SpUtil.putSet(this, Constants.AD_VIDEO_NAME,mAdVideoSets);
-        }
+           // SpUtil.putSet(this, Constants.AD_VIDEO_NAME,mAdVideoSets);
+        //}
 
         listMp4.addAll(mAdVideoSets);
 

@@ -379,6 +379,7 @@ public class MyApplication extends Application {
         return itimes;
     }
 
+    //region
     public void log(final String msg) {
         new Thread(){
             @Override
@@ -399,6 +400,7 @@ public class MyApplication extends Application {
         }.start();
 
     }
+    //endregion
 
     public List<String> getChannels() {
         return channels;
